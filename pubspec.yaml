@@ -21,6 +21,13 @@ dependencies:
     sdk: flutter
   google_fonts: ^3.0.1
   intl: ^0.17.0
+  journal_api:
+    path: packages/journal_api
+  journal_repository:
+    path: packages/journal_repository
+  singlestore_journal_api:
+      path: packages/singlestore_journal_api
+
 
 dev_dependencies:
   bloc_test: ^9.1.0
