@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:wasm_journal_mobile/counter/counter.dart';
+import 'package:wasm_journal_mobile/features/home/home.dart';
 import 'package:wasm_journal_mobile/l10n/l10n.dart';
 
 class App extends StatelessWidget {
@@ -26,8 +26,9 @@ class App extends StatelessWidget {
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
       ],
+      debugShowCheckedModeBanner: false,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const CounterPage(),
+      home: const HomePage(),
     );
   }
 }
