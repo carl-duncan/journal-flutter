@@ -33,7 +33,7 @@ void main() {
       when(
         () => dio.post<Map<String, dynamic>>(
           any(),
-          data: any(named: 'data'),
+          data: any<Map<String, dynamic>>(named: 'data'),
           options: any(named: 'options'),
         ),
       ).thenAnswer(

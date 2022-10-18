@@ -18,13 +18,13 @@ void main() {
     });
 
     test('can be instantiated with a factory constructor', () {
-      final entry = Entry.fromJson({
+      final entry = Entry.fromJson(const {
         'id': 1,
         'title': 'title',
         'body': 'body',
-        'createdAt': DateTime.now().toIso8601String(),
-        'updatedAt': DateTime.now().toIso8601String(),
-        'userId': 1,
+        'created_at': '2021-01-01 00:00:00',
+        'updated_at': '2021-01-01 00:00:00',
+        'user_id': '1234567890',
       });
       expect(entry, isNotNull);
     });
