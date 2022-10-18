@@ -10,7 +10,6 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-
 import 'package:journal/integrations/amplify/amplify_configure.dart';
 
 class AppBlocObserver extends BlocObserver {
