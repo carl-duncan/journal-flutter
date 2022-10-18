@@ -1,4 +1,5 @@
 {
     "@@locale": "es",
-    "helloWorld": "Hola Mundo"
+    "entries": "entradas",
+    "gallery": "galería"
 }

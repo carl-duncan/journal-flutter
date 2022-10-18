@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:journal/home/cubit/cubit.dart';
-import 'package:journal/l10n/l10n.dart';
+import 'package:journal/home/widgets/home_category_selector.dart';
 
 /// {@template home_body}
 /// Body of the HomePage.
@@ -13,10 +13,24 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        return Center(child: Text(l10n.helloWorld));
+        return const CustomScrollView(
+          physics: BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
+          slivers: [
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 60,
+                width: double.infinity,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: HomeCategorySelector(category: HomeCategory.entries),
+            ),
+          ],
+        );
       },
     );
   }
