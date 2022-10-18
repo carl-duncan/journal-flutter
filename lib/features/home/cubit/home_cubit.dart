@@ -7,7 +7,7 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeInitial());
 
-  /// A description for yourCustomFunction 
+  /// A description for yourCustomFunction
   FutureOr<void> yourCustomFunction() {
     // TODO: Add Logic
   }

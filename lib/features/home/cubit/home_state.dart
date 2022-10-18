@@ -24,6 +24,7 @@ class HomeState extends Equatable {
     );
   }
 }
+
 /// {@template home_initial}
 /// The initial state of HomeState
 /// {@endtemplate}

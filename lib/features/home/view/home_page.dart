@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
         body: HomeView(),
       ),
     );
-  }    
+  }
 }
 
 /// {@template home_view}
