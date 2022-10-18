@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasm_journal_mobile/home/home.dart';
+import 'package:journal/home/home.dart';
 
 import '../../helpers/helpers.dart';
 

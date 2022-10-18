@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(wasm_journal_mobile LANGUAGES CXX)
+project(journal LANGUAGES CXX)
 
-set(BINARY_NAME "wasm_journal_mobile")
+set(BINARY_NAME "journal")
 
 cmake_policy(SET CMP0063 NEW)
 
