@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppThemes {
-  static String fontFamily = 'dm_sans';
   static ThemeData lightTheme = ThemeData(
-    fontFamily: fontFamily,
+    fontFamily: GoogleFonts.dmSans().fontFamily,
     splashColor: Colors.transparent,
     splashFactory: NoSplash.splashFactory,
     highlightColor: Colors.transparent,
@@ -42,7 +42,7 @@ class AppThemes {
 
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    fontFamily: fontFamily,
+    fontFamily: GoogleFonts.dmSans().fontFamily,
     splashColor: Colors.transparent,
     splashFactory: NoSplash.splashFactory,
     highlightColor: Colors.transparent,
