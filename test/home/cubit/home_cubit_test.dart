@@ -1,34 +1,56 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:bloc_test/bloc_test.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/cubit/cubit.dart';
 import 'package:journal_api/journal_api.dart';
+import 'package:journal_repository/journal_repository.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:single_store_api/single_store_api.dart';
 
-class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
+class MockDio extends Mock implements Dio {}
 
 void main() {
-  final cubit = MockHomeCubit();
   group('HomeCubit', () {
-    group('constructor', () {
-      when(() => cubit.state).thenReturn(HomeState());
-      test('can be instantiated', () {
-        expect(
-          cubit,
-          isNotNull,
-        );
-      });
-    });
+    final dio = MockDio();
 
-    test('initial state has default value for isLoading', () {
-      when(() => cubit.state).thenReturn(HomeState());
-      expect(cubit.state.isLoading, true);
-    });
+    test('getAllEntries', () async {
+      when(
+        () => dio.post<Map<String, dynamic>>(
+          any(),
+          data: any<Map<String, dynamic>>(named: 'data'),
+          options: any(named: 'options'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: ''),
+          data: {
+            'results': [
+              {
+                'rows': [
+                  {
+                    'id': 0,
+                    'title': 'Test Title',
+                    'body': 'Body',
+                    'created_at': '0000-00-00 00:00:00',
+                    'updated_at': '0000-00-00 00:00:00',
+                    'user_id': '1234'
+                  },
+                ]
+              }
+            ]
+          },
+        ),
+      );
 
-    test('initial state has default value for entries', () {
-      when(() => cubit.state).thenReturn(HomeState());
-      expect(cubit.state.entries, <Entry>[]);
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository);
+
+      await cubit.getEntries();
+
+      expect(cubit.state.entries, isA<List<Entry>>());
+      expect(cubit.state.entries, isNotEmpty);
     });
   });
 }
