@@ -9,10 +9,19 @@ import 'package:journal_api/journal_api.dart';
 // ignore_for_file: prefer_const_constructors
 import 'package:test/test.dart';
 
+class TestJournalApi extends JournalApi {
+  TestJournalApi() : super();
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) {
+    return super.noSuchMethod(invocation);
+  }
+}
+
 void main() {
   group('JournalApi', () {
-    test('can be instantiated', () {
-      expect(JournalApi(), isNotNull);
+    test('can be constructed', () {
+      expect(TestJournalApi.new, returnsNormally);
     });
   });
 }

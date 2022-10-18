@@ -8,4 +8,5 @@
 /// A Very Good Project created by Very Good CLI.
 library journal_api;
 
+export 'src/models/models.dart';
 export 'src/journal_api.dart';
