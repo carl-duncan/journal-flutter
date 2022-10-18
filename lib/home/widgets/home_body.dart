@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wasm_journal_mobile/features/home/cubit/cubit.dart';
+import 'package:wasm_journal_mobile/home/cubit/cubit.dart';
 
 /// {@template home_body}
 /// Body of the HomePage.

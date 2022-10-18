@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:wasm_journal_mobile/features/home/home.dart';
+import 'package:wasm_journal_mobile/home/home.dart';
 import 'package:wasm_journal_mobile/l10n/l10n.dart';
 
 class App extends StatelessWidget {

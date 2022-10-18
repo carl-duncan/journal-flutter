@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasm_journal_mobile/features/home/cubit/cubit.dart';
+import 'package:wasm_journal_mobile/home/cubit/cubit.dart';
 
 void main() {
   group('HomeState', () {

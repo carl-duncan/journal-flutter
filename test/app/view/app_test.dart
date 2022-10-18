@@ -7,7 +7,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wasm_journal_mobile/app/app.dart';
-import 'package:wasm_journal_mobile/features/home/home.dart';
+import 'package:wasm_journal_mobile/home/home.dart';
 
 void main() {
   group('App', () {

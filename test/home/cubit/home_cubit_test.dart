@@ -2,7 +2,7 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasm_journal_mobile/features/home/cubit/cubit.dart';
+import 'package:wasm_journal_mobile/home/cubit/cubit.dart';
 
 void main() {
   group('HomeCubit', () {
