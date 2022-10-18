@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:journal/home/cubit/cubit.dart';
 import 'package:journal/home/widgets/home_body.dart';
 
@@ -18,8 +19,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeCubit(),
-      child: const Scaffold(
-        body: HomeView(),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: Theme.of(context).brightness == Brightness.dark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+        child: const Scaffold(
+          body: HomeView(),
+        ),
       ),
     );
   }
