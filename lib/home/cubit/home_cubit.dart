@@ -8,6 +8,5 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeInitial());
 
   /// A description for yourCustomFunction
-  FutureOr<void> yourCustomFunction() {
-  }
+  FutureOr<void> yourCustomFunction() {}
 }
