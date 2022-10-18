@@ -4,8 +4,10 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
-
+// ignore_for_file: avoid_dynamic_calls,for_in_of_invalid_type
+// ignore_for_file: argument_type_not_assignable
 import 'dart:convert';
+import 'dart:core';
 
 import 'package:dio/dio.dart';
 import 'package:journal_api/journal_api.dart';
@@ -17,26 +19,22 @@ class SingleStoreApi extends JournalApi {
   /// {@macro single_store_api}
   const SingleStoreApi({
     required this.dio,
-    required this.baseUrl,
-    required this.database,
-    required this.username,
-    required this.password,
   });
 
   /// The [Dio] instance used to make requests.
   final Dio dio;
 
-  /// The base URL used to make requests.
-  final String baseUrl;
+  /// The password used to authenticate with the API.
+  String get password => const String.fromEnvironment('PASSWORD');
 
-  /// The database used to make requests.
-  final String database;
+  /// The username used to authenticate with the API.
+  String get username => const String.fromEnvironment('USERNAME');
 
-  /// username for Basic Auth
-  final String username;
+  /// The database used to authenticate with the API.
+  String get database => const String.fromEnvironment('DATABASE');
 
-  /// password for Basic Auth
-  final String password;
+  /// The base URL used to authenticate with the API.
+  String get baseUrl => const String.fromEnvironment('BASE_URL');
 
   @override
   Future<Entry> createEntry(Entry entry) {
@@ -51,7 +49,7 @@ class SingleStoreApi extends JournalApi {
   @override
   Future<List<Entry>> getEntries() async {
     final result = await dio.post<Map<String, dynamic>>(
-      '$baseUrl/query/rows',
+      '${baseUrl}query/rows',
       data: {
         'sql': 'select * from entries',
         'database': database,
@@ -66,13 +64,7 @@ class SingleStoreApi extends JournalApi {
 
     final entries = <Entry>[];
 
-    final data = result.data;
-
-    final resultData = data!['results'] as List<Map<String, dynamic>>;
-
-    final rows = resultData[0]['rows'] as List<Map<String, Object>>;
-
-    for (final row in rows) {
+    for (final row in result.data!['results'][0]['rows']) {
       entries.add(Entry.fromJson(row));
     }
 

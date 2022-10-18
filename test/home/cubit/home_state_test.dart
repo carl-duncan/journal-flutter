@@ -29,7 +29,7 @@ void main() {
         'when no argument specified',
         () {
           const homeState = HomeState(
-            customProperty: 'My property',
+            isLoading: false,
           );
           expect(
             homeState.copyWith(),
@@ -43,16 +43,14 @@ void main() {
         'when all arguments specified',
         () {
           const homeState = HomeState(
-            customProperty: 'My property',
+            isLoading: false,
           );
-          final otherHomeState = HomeState(
-            customProperty: 'My property 2',
-          );
+          final otherHomeState = HomeState();
           expect(homeState, isNot(equals(otherHomeState)));
 
           expect(
             homeState.copyWith(
-              customProperty: otherHomeState.customProperty,
+              isLoading: otherHomeState.isLoading,
             ),
             equals(otherHomeState),
           );

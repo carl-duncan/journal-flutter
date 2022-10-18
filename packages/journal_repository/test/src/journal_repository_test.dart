@@ -12,7 +12,7 @@ import 'package:test/test.dart';
 void main() {
   group('JournalRepository', () {
     test('can be instantiated', () {
-      expect(JournalRepository(), isNotNull);
+      expect(JournalRepository, isNotNull);
     });
   });
 }

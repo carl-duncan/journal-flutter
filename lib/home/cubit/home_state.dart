@@ -6,21 +6,27 @@ part of 'home_cubit.dart';
 class HomeState extends Equatable {
   /// {@macro home}
   const HomeState({
-    this.customProperty = 'Default Value',
+    this.isLoading = true,
+    this.entries = const [],
   });
 
-  /// A description for customProperty
-  final String customProperty;
+  /// A description for isLoading
+  final bool isLoading;
+
+  /// A description for entries
+  final List<Entry> entries;
 
   @override
-  List<Object> get props => [customProperty];
+  List<Object> get props => [isLoading, entries];
 
   /// Creates a copy of the current HomeState with property changes
   HomeState copyWith({
-    String? customProperty,
+    bool? isLoading,
+    List<Entry>? entries,
   }) {
     return HomeState(
-      customProperty: customProperty ?? this.customProperty,
+      isLoading: isLoading ?? this.isLoading,
+      entries: entries ?? this.entries,
     );
   }
 }

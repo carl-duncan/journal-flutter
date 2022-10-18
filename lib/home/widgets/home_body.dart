@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:journal/home/home.dart';
+import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/spacers.dart';
+import 'package:journal_api/journal_api.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 /// {@template home_body}
 /// Body of the HomePage.
@@ -15,6 +19,18 @@ class HomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
+        final entriesByMonth = <String, List<Entry>>{};
+        for (final entry in state.entries) {
+          final month = entry.createdAt.month;
+          final year = entry.createdAt.year;
+          final key = '$month/$year';
+          if (entriesByMonth.containsKey(key)) {
+            entriesByMonth[key]!.add(entry);
+          } else {
+            entriesByMonth[key] = [entry];
+          }
+          entriesByMonth[key]!.add(entry);
+        }
         return CustomScrollView(
           physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
@@ -28,40 +44,66 @@ class HomeBody extends StatelessWidget {
             ),
             SliverPadding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: Spacers.hPagePadding)
-                      .copyWith(bottom: 30),
-              sliver: const SliverToBoxAdapter(
-                child: HomeEntryTitle(
-                  title: 'February 2022',
-                  subtitle: '2 entries',
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding:
                   const EdgeInsets.symmetric(horizontal: Spacers.hPagePadding),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: HomeEntryTile(
-                        date: DateTime(2022, 12, 4),
-                        title: 'Lorem ipsum dolor ',
-                        subtitle: 'Lorem ipsum dolor sit amet, '
-                            'consectetur adipiscing elit. '
-                            'Donec ac ex et tellus '
-                            'facilisis ultricies sit.',
-                      ),
-                    );
-                  },
-                  childCount: 3,
-                ),
-              ),
+              sliver: _parseEntries(state.entries, context),
             ),
           ],
         );
       },
     );
+  }
+
+  MultiSliver _parseEntries(List<Entry> entries, BuildContext context) {
+    final entriesByMonth = <String, List<Entry>>{};
+    for (final entry in entries) {
+      final key = DateFormat.MMMM().add_y().format(entry.createdAt);
+      if (entriesByMonth.containsKey(key)) {
+        entriesByMonth[key]!.add(entry);
+      } else {
+        entriesByMonth[key] = [entry];
+      }
+      if (!entriesByMonth[key]!.contains(entry)) {
+        entriesByMonth[key]!.add(entry);
+      }
+    }
+    final children = <Widget>[];
+    final i10n = AppLocalizations.of(context);
+
+    for (final entry in entriesByMonth.entries) {
+      children.add(
+        MultiSliver(
+          children: [
+            SliverToBoxAdapter(
+              child: HomeEntryTitle(
+                title: entry.key,
+                subtitle: '${entry.value.length} ${i10n.entries}',
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 30),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 20,
+                    ),
+                    child: HomeEntryTile(
+                      date: entry.value[index].createdAt,
+                      title: '${entry.value[index].title} ',
+                      subtitle: entry.value[index].body,
+                    ),
+                  );
+                },
+                childCount: entry.value.length,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return MultiSliver(children: children);
   }
 }

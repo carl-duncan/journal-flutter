@@ -20,10 +20,6 @@ void main() {
   group('SingleStoreApi', () {
     final api = SingleStoreApi(
       dio: dio,
-      baseUrl: 'baseUrl',
-      database: 'database',
-      username: 'username',
-      password: 'password',
     );
     test('can be instantiated', () {
       expect(api, isNotNull);
