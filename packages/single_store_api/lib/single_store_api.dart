@@ -6,6 +6,6 @@
 // https://opensource.org/licenses/MIT.
 
 /// A Very Good Project created by Very Good CLI.
-library singlestore_journal_api;
+library single_store_api;
 
-export 'src/singlestore_journal_api.dart';
+export 'src/single_store_api.dart';

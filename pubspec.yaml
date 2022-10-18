@@ -25,8 +25,8 @@ dependencies:
     path: packages/journal_api
   journal_repository:
     path: packages/journal_repository
-  singlestore_journal_api:
-      path: packages/singlestore_journal_api
+  single_store_api:
+      path: packages/single_store_api
 
 
 dev_dependencies:

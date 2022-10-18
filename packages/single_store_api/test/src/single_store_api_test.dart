@@ -5,14 +5,14 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'package:singlestore_journal_api/singlestore_journal_api.dart';
+import 'package:single_store_api/single_store_api.dart';
 // ignore_for_file: prefer_const_constructors
 import 'package:test/test.dart';
 
 void main() {
-  group('SinglestoreJournalApi', () {
+  group('SingleStoreApi', () {
     test('can be instantiated', () {
-      expect(SinglestoreJournalApi(), isNotNull);
+      expect(SingleStoreApi(), isNotNull);
     });
   });
 }
