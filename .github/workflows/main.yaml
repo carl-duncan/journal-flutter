@@ -11,3 +11,5 @@ jobs:
     with:
       flutter_channel: stable
       flutter_version: 3.3.3
+      min_coverage: 95
+      exclude: "**/l10n/l10n.dart"
