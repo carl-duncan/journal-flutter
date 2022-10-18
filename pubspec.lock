@@ -72,7 +72,7 @@ packages:
     source: hosted
     version: "0.6.9"
   amplify_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: amplify_flutter
       url: "https://pub.dartlang.org"
