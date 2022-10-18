@@ -12,7 +12,7 @@ void main() {
         body: 'body',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        userId: 1,
+        userId: '1',
       );
       expect(entry, isNotNull);
     });
@@ -36,7 +36,7 @@ void main() {
         body: 'body',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        userId: 1,
+        userId: '1',
       );
       final json = entry.toJson();
       expect(json, isNotNull);

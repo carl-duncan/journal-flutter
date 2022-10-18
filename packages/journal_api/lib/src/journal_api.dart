@@ -15,7 +15,7 @@ abstract class JournalApi {
   const JournalApi();
 
   /// get All Entries from a Journal
-  Stream<List<Entry>> getEntries();
+  Future<List<Entry>> getEntries();
 
   /// search for an Entry by query
   Stream<List<Entry>> searchEntries(String query);

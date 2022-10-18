@@ -44,17 +44,20 @@ class Entry extends Equatable {
   /// The created date of an Entry.
   ///
   /// Defaults to an empty string.
+  @JsonKey(name: 'created_at')
   final DateTime createdAt;
 
   /// The updated date of an Entry.
   ///
   /// Defaults to an empty string.
+  @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
   /// The user id of an Entry.
   ///
   /// Defaults to an empty string.
-  final int userId;
+  @JsonKey(name: 'user_id')
+  final String userId;
 
   @override
   List<Object?> get props => [id, title, body, createdAt, updatedAt, userId];
