@@ -1,3 +1,5 @@
+// ignore_for_file: uri_does_not_exist, undefined_identifier
+// ignore_for_file: argument_type_not_assignable
 import 'dart:developer';
 
 import 'package:amplify_api/amplify_api.dart';
