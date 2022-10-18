@@ -8,7 +8,6 @@
 import 'package:journal/app/app.dart';
 import 'package:journal/bootstrap.dart';
 
-
 Future<void> main() async {
   await bootstrap(() => const App());
 }
