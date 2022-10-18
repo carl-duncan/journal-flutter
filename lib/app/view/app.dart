@@ -8,9 +8,9 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:journal/app_themes.dart';
 import 'package:journal/home/home.dart';
 import 'package:journal/l10n/l10n.dart';
+import 'package:journal/res/app_themes.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

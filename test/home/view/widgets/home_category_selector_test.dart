@@ -6,7 +6,7 @@ import 'package:journal/home/widgets/home_category_selector.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  group('HomeBody', () {
+  group('HomeCategorySelector', () {
     testWidgets('renders Text', (tester) async {
       await tester.pumpApp(
         HomeCategorySelector(category: HomeCategory.gallery),
