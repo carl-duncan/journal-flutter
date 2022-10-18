@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wasm_journal_mobile/home/home.dart';
 
+import '../../helpers/helpers.dart';
+
 void main() {
   group('HomePage', () {
     group('route', () {
@@ -13,7 +15,7 @@ void main() {
     });
 
     testWidgets('renders HomeView', (tester) async {
-      await tester.pumpWidget(MaterialApp(home: HomePage()));
+      await tester.pumpApp(HomePage());
       expect(find.byType(HomeView), findsOneWidget);
     });
   });

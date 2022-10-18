@@ -3,17 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wasm_journal_mobile/home/home.dart';
+import '../../../helpers/helpers.dart';
 
 void main() {
   group('HomeBody', () {
     testWidgets('renders Text', (tester) async {
-      await tester.pumpWidget(
+      await tester.pumpApp(
         BlocProvider(
           create: (context) => HomeCubit(),
-          child: MaterialApp(home: HomeBody()),
+          child: HomeBody(),
         ),
       );
-
       expect(find.byType(Text), findsOneWidget);
     });
   });
