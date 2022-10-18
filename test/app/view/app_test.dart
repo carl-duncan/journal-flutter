@@ -6,8 +6,8 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasm_journal_mobile/app/app.dart';
-import 'package:wasm_journal_mobile/home/home.dart';
+import 'package:journal/app/app.dart';
+import 'package:journal/home/home.dart';
 
 void main() {
   group('App', () {

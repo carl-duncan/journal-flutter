@@ -1,6 +1,6 @@
 {
-    "name": "Wasm Journal Mobile",
-    "short_name": "Wasm Journal Mobile",
+    "name": "Journal",
+    "short_name": "Journal",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,4 +1,4 @@
-package com.example.verygoodcore.wasm_journal_mobile
+package com.example.verygoodcore.journal
 
 import io.flutter.embedding.android.FlutterActivity
 

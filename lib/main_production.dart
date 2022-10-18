@@ -5,8 +5,8 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'package:wasm_journal_mobile/app/app.dart';
-import 'package:wasm_journal_mobile/bootstrap.dart';
+import 'package:journal/app/app.dart';
+import 'package:journal/bootstrap.dart';
 
 void main() {
   bootstrap(() => const App());
