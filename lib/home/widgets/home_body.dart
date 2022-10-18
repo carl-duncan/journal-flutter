@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:journal/home/cubit/cubit.dart';
-import 'package:journal/home/widgets/home_category_selector.dart';
-import 'package:journal/home/widgets/home_entry_title.dart';
-
+import 'package:journal/home/home.dart';
 import 'package:journal/res/spacers.dart';
 
 /// {@template home_body}
@@ -18,23 +15,47 @@ class HomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        return const CustomScrollView(
-          physics: BouncingScrollPhysics(
+        return CustomScrollView(
+          physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
           ),
           slivers: [
-            SliverPadding(
+            const SliverPadding(
               padding: EdgeInsets.only(top: 60, bottom: 50),
               sliver: SliverToBoxAdapter(
                 child: HomeCategorySelector(category: HomeCategory.entries),
               ),
             ),
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: Spacers.hPagePadding),
-              sliver: SliverToBoxAdapter(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: Spacers.hPagePadding)
+                      .copyWith(bottom: 30),
+              sliver: const SliverToBoxAdapter(
                 child: HomeEntryTitle(
                   title: 'February 2022',
                   subtitle: '2 entries',
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: Spacers.hPagePadding),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: HomeEntryTile(
+                        date: DateTime(2022, 12, 4),
+                        title: 'Lorem ipsum dolor ',
+                        subtitle: 'Lorem ipsum dolor sit amet, '
+                            'consectetur adipiscing elit. '
+                            'Donec ac ex et tellus '
+                            'facilisis ultricies sit.',
+                      ),
+                    );
+                  },
+                  childCount: 3,
                 ),
               ),
             ),
