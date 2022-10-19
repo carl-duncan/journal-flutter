@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:journal/home/home.dart';
-import 'package:journal/home/widgets/home_section.dart';
 import 'package:journal/res/spacers.dart';
 import 'package:journal/res/widgets/custom_scroll_body.dart';
 import 'package:journal_api/journal_api.dart';
