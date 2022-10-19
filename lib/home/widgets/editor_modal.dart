@@ -7,7 +7,13 @@ class EditorModal extends StatelessWidget {
   const EditorModal({
     super.key,
     this.entry,
+    required this.onSave,
+    required this.controller,
   });
+
+  final TextEditingController controller;
+
+  final VoidCallback onSave;
 
   final Entry? entry;
 
@@ -54,6 +60,7 @@ class EditorModal extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       Navigator.pop(context);
+                      onSave();
                     },
                     child: const Icon(
                       Icons.check,
@@ -68,7 +75,11 @@ class EditorModal extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.7,
                 child: TextField(
+                  controller: controller,
                   autofocus: true,
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
                   decoration: InputDecoration(
                     hintText: l10n.enterYourTextHere,
                     hintStyle: const TextStyle(

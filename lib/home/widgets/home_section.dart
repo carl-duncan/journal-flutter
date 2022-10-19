@@ -32,7 +32,7 @@ class HomeSection extends StatelessWidget {
                   bottom: 20,
                 ),
                 child: HomeEntryTile(
-                  date: entries[index].createdAt,
+                  date: entries[index].createdAt!,
                   title: '${entries[index].title} ',
                   subtitle: entries[index].body,
                 ),

@@ -36,9 +36,29 @@ class SingleStoreApi extends JournalApi {
   /// The base URL used to authenticate with the API.
   String get baseUrl => const String.fromEnvironment('BASE_URL');
 
+  /// The options used for the [Dio] instance.
+  Options get options => Options(
+        headers: {
+          'Authorization':
+              'Basic ${base64Encode(utf8.encode('$username:$password'))}',
+        },
+      );
+
   @override
-  Future<Entry> createEntry(Entry entry) {
-    throw UnimplementedError();
+  Future<void> createEntry(Entry entry) async {
+    final data = {
+      'sql': 'insert into entries (title,body,user_id) values (?,?,?)',
+      'args': [entry.title, entry.body, entry.userId],
+      'database': database,
+    };
+
+    await dio.post<Map<String, dynamic>>(
+      '${baseUrl}exec',
+      data: data,
+      options: options,
+    );
+
+    return;
   }
 
   @override
@@ -54,12 +74,7 @@ class SingleStoreApi extends JournalApi {
         'sql': 'select * from entries',
         'database': database,
       },
-      options: Options(
-        headers: {
-          'Authorization':
-              'Basic ${base64Encode(utf8.encode('$username:$password'))}',
-        },
-      ),
+      options: options,
     );
 
     final entries = <Entry>[];
@@ -77,7 +92,7 @@ class SingleStoreApi extends JournalApi {
   }
 
   @override
-  Future<Entry> updateEntry(Entry entry) {
+  Future<void> updateEntry(Entry entry) {
     throw UnimplementedError();
   }
 }

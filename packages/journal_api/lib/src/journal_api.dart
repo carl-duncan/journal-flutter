@@ -21,10 +21,10 @@ abstract class JournalApi {
   Stream<List<Entry>> searchEntries(String query);
 
   /// create an Entry
-  Future<Entry> createEntry(Entry entry);
+  Future<void> createEntry(Entry entry);
 
   /// update an Entry
-  Future<Entry> updateEntry(Entry entry);
+  Future<void> updateEntry(Entry entry);
 
   /// delete an Entry
   Future<void> deleteEntry(Entry entry);

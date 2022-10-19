@@ -20,4 +20,9 @@ class JournalRepository {
   Future<List<Entry>> getEntries() async {
     return _api.getEntries();
   }
+
+  /// A description for createEntry
+  Future<void> createEntry(Entry entry) async {
+    return _api.createEntry(entry);
+  }
 }

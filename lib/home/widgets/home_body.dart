@@ -27,6 +27,7 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _editorController = TextEditingController();
   var _scrollOffset = 0.0;
 
   @override
@@ -43,6 +44,13 @@ class _HomeBodyState extends State<HomeBody> {
       });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _editorController.dispose();
+    super.dispose();
   }
 
   @override
@@ -119,7 +127,9 @@ class _HomeBodyState extends State<HomeBody> {
               top: MediaQuery.of(context).size.height * 0.85 - _scrollOffset,
               duration: const Duration(milliseconds: 200),
               child: HomeIsland(
-                onAddPressed: _toggleEditor,
+                onAddPressed: () {
+                  _toggleEditor(cubit);
+                },
                 onSearchPressed: cubit.toggleSearchBar,
                 onSettingsPressed: () {
                   log('onSettingsPressed');
@@ -132,12 +142,17 @@ class _HomeBodyState extends State<HomeBody> {
     );
   }
 
-  void _toggleEditor() {
+  void _toggleEditor(HomeCubit cubit) {
     showBarModalBottomSheet<EditorModal>(
       useRootNavigator: true,
       context: context,
       animationCurve: Curves.easeInOut,
-      builder: (context) => const EditorModal(),
+      builder: (context) => EditorModal(
+        onSave: () {
+          cubit.createEntry(_editorController.text);
+        },
+        controller: _editorController,
+      ),
     );
   }
 
@@ -146,7 +161,7 @@ class _HomeBodyState extends State<HomeBody> {
     for (final entry in entries) {
       final key = DateFormat.MMMM(
         Localizations.localeOf(context).languageCode,
-      ).add_y().format(entry.createdAt);
+      ).add_y().format(entry.createdAt!);
       if (entriesByMonth.containsKey(key)) {
         entriesByMonth[key]!.add(entry);
       } else {

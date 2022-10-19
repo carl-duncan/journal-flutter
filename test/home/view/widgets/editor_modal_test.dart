@@ -6,9 +6,14 @@ import '../../../helpers/helpers.dart';
 
 void main() {
   group('EditorModal', () {
+    final controller = TextEditingController();
+
     testWidgets('EditorModal', (tester) async {
       await tester.pumpApp(
-        const EditorModal(),
+        EditorModal(
+          controller: controller,
+          onSave: () {},
+        ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
@@ -18,7 +23,10 @@ void main() {
 
     testWidgets('EditorModal - close', (tester) async {
       await tester.pumpApp(
-        const EditorModal(),
+        EditorModal(
+          controller: controller,
+          onSave: () {},
+        ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
       await tester.tap(find.byIcon(Icons.close));
@@ -28,7 +36,10 @@ void main() {
 
     testWidgets('EditorModal - save', (tester) async {
       await tester.pumpApp(
-        const EditorModal(),
+        EditorModal(
+          controller: controller,
+          onSave: () {},
+        ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
       await tester.tap(find.byIcon(Icons.check));
