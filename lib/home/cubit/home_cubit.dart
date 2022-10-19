@@ -13,7 +13,12 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> getEntries() async {
-    emit(state.copyWith(entries: await _repository.getEntries()));
+    emit(
+      state.copyWith(
+        entries: await _repository.getEntries(),
+        isLoading: false,
+      ),
+    );
   }
 
   final JournalRepository _repository;

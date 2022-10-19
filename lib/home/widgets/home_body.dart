@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:journal/home/home.dart';
 import 'package:journal/home/widgets/home_section.dart';
 import 'package:journal/res/spacers.dart';
+import 'package:journal/res/widgets/custom_scroll_body.dart';
 import 'package:journal_api/journal_api.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -20,11 +21,8 @@ class HomeBody extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final entriesByMonth = _getEntriesByMonth(state.entries);
-
-        return CustomScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
+        return CustomScrollBody(
+          isLoading: state.isLoading,
           slivers: [
             const SliverPadding(
               padding: EdgeInsets.only(top: 60, bottom: 50),
