@@ -10,6 +10,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
+import 'package:journal/integrations/amplify/amplify_configure.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -31,6 +32,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   };
 
   Bloc.observer = AppBlocObserver();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await AmplifyConfigure.configureAmplify();
 
   await runZonedGuarded(
     () async => runApp(await builder()),

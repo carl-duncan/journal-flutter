@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:journal/home/cubit/cubit.dart';
 import 'package:journal/home/widgets/home_body.dart';
+import 'package:journal_repository/journal_repository.dart';
 
 /// {@template home_page}
 /// A description for HomePage
@@ -17,9 +19,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit(),
-      child: const Scaffold(
-        body: HomeView(),
+      create: (context) => HomeCubit(context.read<JournalRepository>()),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: Theme.of(context).brightness == Brightness.dark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+        child: const Scaffold(
+          body: HomeView(),
+        ),
       ),
     );
   }

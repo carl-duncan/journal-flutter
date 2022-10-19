@@ -6,21 +6,38 @@ part of 'home_cubit.dart';
 class HomeState extends Equatable {
   /// {@macro home}
   const HomeState({
-    this.customProperty = 'Default Value',
+    this.isLoading = true,
+    this.entries = const [],
+    this.showSearchBar = false,
+    this.category = HomeCategory.entries,
   });
 
-  /// A description for customProperty
-  final String customProperty;
+  /// A description for isLoading
+  final bool isLoading;
+
+  /// A description for entries
+  final List<Entry> entries;
+
+  /// A description for showSearchBar
+  final bool showSearchBar;
+
+  final HomeCategory category;
 
   @override
-  List<Object> get props => [customProperty];
+  List<Object> get props => [isLoading, entries, showSearchBar, category];
 
   /// Creates a copy of the current HomeState with property changes
   HomeState copyWith({
-    String? customProperty,
+    bool? isLoading,
+    List<Entry>? entries,
+    bool? showSearchBar,
+    HomeCategory? category,
   }) {
     return HomeState(
-      customProperty: customProperty ?? this.customProperty,
+      isLoading: isLoading ?? this.isLoading,
+      entries: entries ?? this.entries,
+      showSearchBar: showSearchBar ?? this.showSearchBar,
+      category: category ?? this.category,
     );
   }
 }

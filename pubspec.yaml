@@ -13,6 +13,7 @@ dependencies:
   amplify_authenticator: ^0.2.3
   amplify_flutter: ^0.6.0
   bloc: ^8.1.0
+  dio: ^4.0.6
   equatable: ^2.0.5
   flutter:
     sdk: flutter
@@ -21,6 +22,14 @@ dependencies:
     sdk: flutter
   google_fonts: ^3.0.1
   intl: ^0.17.0
+  journal_api:
+    path: packages/journal_api
+  journal_repository:
+    path: packages/journal_repository
+  single_store_api:
+      path: packages/single_store_api
+  sliver_tools: ^0.2.8
+
 
 dev_dependencies:
   bloc_test: ^9.1.0
