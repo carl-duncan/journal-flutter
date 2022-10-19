@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:journal/home/home.dart';
+import 'package:journal/home/widgets/editor_modal.dart';
+import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/spacers.dart';
 import 'package:journal/res/widgets/custom_scroll_body.dart';
 import 'package:journal_api/journal_api.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 /// {@template home_body}
@@ -45,6 +48,7 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<HomeCubit>();
+    final l10n = context.l10n;
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final entriesByMonth = _getEntriesByMonth(state.entries);
@@ -76,12 +80,13 @@ class _HomeBodyState extends State<HomeBody> {
                     vertical: 25,
                   ),
                   sliver: state.showSearchBar
-                      ? const SliverToBoxAdapter(
-                          key: Key('search_bar'),
+                      ? SliverToBoxAdapter(
+                          key: const Key('search_bar'),
                           child: TextField(
+                            autofocus: true,
                             decoration: InputDecoration(
-                              hintText: 'Search',
-                              prefixIcon: Icon(Icons.search),
+                              hintText: l10n.search,
+                              prefixIcon: const Icon(Icons.search),
                             ),
                           ),
                         )
@@ -114,9 +119,7 @@ class _HomeBodyState extends State<HomeBody> {
               top: MediaQuery.of(context).size.height * 0.85 - _scrollOffset,
               duration: const Duration(milliseconds: 200),
               child: HomeIsland(
-                onAddPressed: () {
-                  log('onAddPressed');
-                },
+                onAddPressed: _toggleEditor,
                 onSearchPressed: cubit.toggleSearchBar,
                 onSettingsPressed: () {
                   log('onSettingsPressed');
@@ -129,10 +132,21 @@ class _HomeBodyState extends State<HomeBody> {
     );
   }
 
+  void _toggleEditor() {
+    showBarModalBottomSheet<EditorModal>(
+      useRootNavigator: true,
+      context: context,
+      animationCurve: Curves.easeInOut,
+      builder: (context) => const EditorModal(),
+    );
+  }
+
   Map<String, List<Entry>> _getEntriesByMonth(List<Entry> entries) {
     final entriesByMonth = <String, List<Entry>>{};
     for (final entry in entries) {
-      final key = DateFormat.MMMM().add_y().format(entry.createdAt);
+      final key = DateFormat.MMMM(
+        Localizations.localeOf(context).languageCode,
+      ).add_y().format(entry.createdAt);
       if (entriesByMonth.containsKey(key)) {
         entriesByMonth[key]!.add(entry);
       } else {

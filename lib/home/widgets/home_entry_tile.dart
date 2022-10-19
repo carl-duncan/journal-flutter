@@ -14,8 +14,9 @@ class HomeEntryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dayOfWeek = DateFormat('EEE').format(date);
-    final dayOfMonth = DateFormat('d').format(date);
+    final locale = Localizations.localeOf(context).languageCode;
+    final dayOfWeek = DateFormat('EEE', locale).format(date);
+    final dayOfMonth = DateFormat('d', locale).format(date);
     final dayOfMonthPadded =
         dayOfMonth.length == 1 ? '0$dayOfMonth' : dayOfMonth;
     return Row(

@@ -26,6 +26,7 @@ dependencies:
     path: packages/journal_api
   journal_repository:
     path: packages/journal_repository
+  modal_bottom_sheet: ^2.1.2
   single_store_api:
       path: packages/single_store_api
   sliver_tools: ^0.2.8

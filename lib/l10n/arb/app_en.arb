@@ -1,5 +1,7 @@
 {
     "@@locale": "en",
     "entries": "entries",
-    "gallery": "gallery"
+    "gallery": "gallery",
+    "enterYourTextHere": "Enter your text here",
+    "search": "search"
 }
