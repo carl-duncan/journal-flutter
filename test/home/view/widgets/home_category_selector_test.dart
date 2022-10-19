@@ -9,9 +9,14 @@ void main() {
   group('HomeCategorySelector', () {
     testWidgets('renders Text', (tester) async {
       await tester.pumpApp(
-        HomeCategorySelector(category: HomeCategory.gallery),
+        HomeCategorySelector(
+          category: HomeCategory.gallery,
+          onEntriesPressed: () {},
+          onGalleryPressed: () {},
+        ),
       );
       expect(find.byType(Text), findsNWidgets(3));
+      expect(find.byType(GestureDetector), findsNWidgets(2));
     });
   });
 }

@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/cubit/cubit.dart';
+import 'package:journal/home/widgets/home_category_selector.dart';
 import 'package:journal_api/journal_api.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -65,6 +66,18 @@ void main() {
       cubit.toggleSearchBar();
 
       expect(cubit.state.showSearchBar, isTrue);
+    });
+
+    test('toggleCategory', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository);
+
+      expect(cubit.state.category, HomeCategory.entries);
+
+      cubit.toggleCategory(HomeCategory.gallery);
+
+      expect(cubit.state.category, HomeCategory.gallery);
     });
   });
 }

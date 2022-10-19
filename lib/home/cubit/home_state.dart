@@ -9,6 +9,7 @@ class HomeState extends Equatable {
     this.isLoading = true,
     this.entries = const [],
     this.showSearchBar = false,
+    this.category = HomeCategory.entries,
   });
 
   /// A description for isLoading
@@ -20,19 +21,23 @@ class HomeState extends Equatable {
   /// A description for showSearchBar
   final bool showSearchBar;
 
+  final HomeCategory category;
+
   @override
-  List<Object> get props => [isLoading, entries, showSearchBar];
+  List<Object> get props => [isLoading, entries, showSearchBar, category];
 
   /// Creates a copy of the current HomeState with property changes
   HomeState copyWith({
     bool? isLoading,
     List<Entry>? entries,
     bool? showSearchBar,
+    HomeCategory? category,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
       entries: entries ?? this.entries,
       showSearchBar: showSearchBar ?? this.showSearchBar,
+      category: category ?? this.category,
     );
   }
 }

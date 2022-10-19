@@ -44,6 +44,7 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<HomeCubit>();
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final entriesByMonth = _getEntriesByMonth(state.entries);
@@ -53,12 +54,20 @@ class _HomeBodyState extends State<HomeBody> {
               controller: _scrollController,
               isLoading: state.isLoading,
               slivers: [
-                const SliverPadding(
-                  padding: EdgeInsets.only(
+                SliverPadding(
+                  padding: const EdgeInsets.only(
                     top: 60,
                   ),
                   sliver: SliverToBoxAdapter(
-                    child: HomeCategorySelector(category: HomeCategory.entries),
+                    child: HomeCategorySelector(
+                      category: state.category,
+                      onEntriesPressed: () => cubit.toggleCategory(
+                        HomeCategory.entries,
+                      ),
+                      onGalleryPressed: () => cubit.toggleCategory(
+                        HomeCategory.gallery,
+                      ),
+                    ),
                   ),
                 ),
                 SliverPadding(
@@ -81,19 +90,20 @@ class _HomeBodyState extends State<HomeBody> {
                           child: SizedBox.shrink(),
                         ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Spacers.hPagePadding,
+                if (state.category == HomeCategory.entries)
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Spacers.hPagePadding,
+                    ),
+                    sliver: MultiSliver(
+                      children: entriesByMonth.entries.map((entry) {
+                        return HomeSection(
+                          title: entry.key,
+                          entries: entry.value,
+                        );
+                      }).toList(),
+                    ),
                   ),
-                  sliver: MultiSliver(
-                    children: entriesByMonth.entries.map((entry) {
-                      return HomeSection(
-                        title: entry.key,
-                        entries: entry.value,
-                      );
-                    }).toList(),
-                  ),
-                ),
               ],
             ),
             AnimatedPositioned(
@@ -107,9 +117,7 @@ class _HomeBodyState extends State<HomeBody> {
                 onAddPressed: () {
                   log('onAddPressed');
                 },
-                onSearchPressed: () {
-                  context.read<HomeCubit>().toggleSearchBar();
-                },
+                onSearchPressed: cubit.toggleSearchBar,
                 onSettingsPressed: () {
                   log('onSettingsPressed');
                 },
