@@ -14,8 +14,8 @@ void main() {
   group('HomeCubit', () {
     final dio = MockDio();
 
-    test('getAllEntries', () async {
-      when(
+    setUp(
+      () => when(
         () => dio.post<Map<String, dynamic>>(
           any(),
           data: any<Map<String, dynamic>>(named: 'data'),
@@ -41,8 +41,10 @@ void main() {
             ]
           },
         ),
-      );
+      ),
+    );
 
+    test('getEntries', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
       final cubit = HomeCubit(repository);
@@ -51,6 +53,18 @@ void main() {
 
       expect(cubit.state.entries, isA<List<Entry>>());
       expect(cubit.state.entries, isNotEmpty);
+    });
+
+    test('toggleSearchBar', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository);
+
+      expect(cubit.state.showSearchBar, isFalse);
+
+      cubit.toggleSearchBar();
+
+      expect(cubit.state.showSearchBar, isTrue);
     });
   });
 }

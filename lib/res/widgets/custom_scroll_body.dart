@@ -5,15 +5,18 @@ class CustomScrollBody extends StatelessWidget {
     super.key,
     required this.slivers,
     required this.isLoading,
+    required this.controller,
   });
   final List<Widget> slivers;
   final bool isLoading;
+  final ScrollController controller;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         CustomScrollView(
+          controller: controller,
           physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
           ),

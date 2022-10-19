@@ -21,5 +21,13 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
+  void toggleSearchBar() {
+    emit(
+      state.copyWith(
+        showSearchBar: !state.showSearchBar,
+      ),
+    );
+  }
+
   final JournalRepository _repository;
 }
