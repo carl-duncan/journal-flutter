@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
             ? SystemUiOverlayStyle.light
             : SystemUiOverlayStyle.dark,
         child: const Scaffold(
-          body: HomeView(),
+          body: SelectionArea(child: HomeView()),
         ),
       ),
     );
