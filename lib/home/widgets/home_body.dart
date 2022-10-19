@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -149,7 +150,7 @@ class _HomeBodyState extends State<HomeBody> {
       animationCurve: Curves.easeInOut,
       builder: (context) => EditorModal(
         onSave: () {
-          cubit.createEntry(_editorController.text);
+          cubit.createEntry(_editorController.text, Amplify.Auth);
         },
         controller: _editorController,
       ),

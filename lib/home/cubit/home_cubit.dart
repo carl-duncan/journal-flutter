@@ -10,7 +10,7 @@ import 'package:journal_repository/journal_repository.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this._repository) : super(const HomeInitial()) {
+  HomeCubit(this._repository, this._category) : super(const HomeInitial()) {
     getEntries();
   }
 
@@ -47,17 +47,22 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> createEntry(String input) async {
+  Future<String> _getUserId() async {
+    final user = await _category.getCurrentUser();
+    return user.userId;
+  }
+
+  Future<void> createEntry(String input, AuthCategory category) async {
     isLoading(isLoading: true);
     final title = input.split(' ').take(3).join(' ');
     final body = input.split(' ').skip(3).join(' ');
 
-    final user = await Amplify.Auth.getCurrentUser();
+    final userId = await _getUserId();
 
     final entry = Entry(
       title: title,
       body: body,
-      userId: user.userId,
+      userId: userId,
     );
 
     await _repository.createEntry(entry);
@@ -66,4 +71,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   final JournalRepository _repository;
+
+  final AuthCategory _category;
 }
