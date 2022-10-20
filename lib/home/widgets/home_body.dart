@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -115,6 +114,13 @@ class _HomeBodyState extends State<HomeBody> {
                         return HomeSection(
                           title: entry.key,
                           entries: entry.value,
+                          onEntryTileTap: (Entry entry) {
+                            _editorController.text =
+                                '${entry.title} ${entry.body}';
+                            _toggleEditor(cubit, () {
+                              cubit.updateEntry(entry, _editorController.text);
+                            });
+                          },
                         );
                       }).toList(),
                     ),
@@ -130,7 +136,9 @@ class _HomeBodyState extends State<HomeBody> {
               duration: const Duration(milliseconds: 200),
               child: HomeIsland(
                 onAddPressed: () {
-                  _toggleEditor(cubit);
+                  _toggleEditor(cubit, () {
+                    cubit.createEntry(_editorController.text);
+                  });
                 },
                 onSearchPressed: cubit.toggleSearchBar,
                 onSettingsPressed: () {
@@ -145,7 +153,7 @@ class _HomeBodyState extends State<HomeBody> {
     );
   }
 
-  void _toggleEditor(HomeCubit cubit) {
+  void _toggleEditor(HomeCubit cubit, VoidCallback onSave) {
     showBarModalBottomSheet<EditorModal>(
       useRootNavigator: true,
       isDismissible: false,
@@ -155,7 +163,7 @@ class _HomeBodyState extends State<HomeBody> {
       builder: (context) => EditorModal(
         onSave: () {
           Navigator.pop(context);
-          cubit.createEntry(_editorController.text, Amplify.Auth);
+          onSave();
         },
         onClose: () {
           Navigator.pop(context);
@@ -172,14 +180,7 @@ class _HomeBodyState extends State<HomeBody> {
       final key = DateFormat.MMMM(
         Localizations.localeOf(context).languageCode,
       ).add_y().format(entry.createdAt!);
-      if (entriesByMonth.containsKey(key)) {
-        entriesByMonth[key]!.add(entry);
-      } else {
-        entriesByMonth[key] = [entry];
-      }
-      if (!entriesByMonth[key]!.contains(entry)) {
-        entriesByMonth[key]!.add(entry);
-      }
+      entriesByMonth[key] = [entry];
     }
     return entriesByMonth;
   }

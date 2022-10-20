@@ -44,6 +44,7 @@ class EditorModal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
+                    key: const Key('editor_modal_close_button'),
                     onTap: onClose,
                     child: const Icon(
                       Icons.close,
@@ -59,6 +60,7 @@ class EditorModal extends StatelessWidget {
                   ),
                   // save button
                   InkWell(
+                    key: const Key('editor_modal_save_button'),
                     onTap: onSave,
                     child: const Icon(
                       Icons.check,
@@ -73,6 +75,7 @@ class EditorModal extends StatelessWidget {
               SizedBox(
                 height: size.height * 0.7,
                 child: TextField(
+                  key: const Key('editor_modal_text_field'),
                   controller: controller,
                   autofocus: true,
                   style: const TextStyle(

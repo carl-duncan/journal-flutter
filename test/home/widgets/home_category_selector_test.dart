@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/widgets/home_category_selector.dart';
-import '../../../helpers/helpers.dart';
+import '../../helpers/helpers.dart';
 
 void main() {
   group('HomeCategorySelector', () {

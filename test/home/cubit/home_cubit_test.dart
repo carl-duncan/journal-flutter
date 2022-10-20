@@ -112,7 +112,7 @@ void main() {
         ),
       );
 
-      await cubit.createEntry('Test Message from Carl Duncan', authCategory);
+      await cubit.createEntry('Test Message from Carl Duncan');
 
       expect(cubit.state.entries, isA<List<Entry>>());
       expect(cubit.state.entries, isNotEmpty);
@@ -124,6 +124,34 @@ void main() {
       final cubit = HomeCubit(repository, authCategory);
 
       await cubit.searchEntries('Test');
+
+      expect(cubit.state.entries, isA<List<Entry>>());
+      expect(cubit.state.entries, isNotEmpty);
+    });
+
+    test('updateEntry', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository, authCategory);
+
+      when(authCategory.getCurrentUser).thenAnswer(
+        (_) async => AuthUser(
+          userId: '1234',
+          username: 'test',
+        ),
+      );
+
+      await cubit.updateEntry(
+        Entry(
+          id: 0,
+          title: 'Test Title',
+          body: 'Body',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          userId: '1234',
+        ),
+        'Test Message from Carl Duncan',
+      );
 
       expect(cubit.state.entries, isA<List<Entry>>());
       expect(cubit.state.entries, isNotEmpty);

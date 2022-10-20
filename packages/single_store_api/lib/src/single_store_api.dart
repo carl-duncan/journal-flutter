@@ -108,7 +108,19 @@ class SingleStoreApi extends JournalApi {
   }
 
   @override
-  Future<void> updateEntry(Entry entry) {
-    throw UnimplementedError();
+  Future<void> updateEntry(Entry entry) async {
+    final data = {
+      'sql': 'update entries set title = ?, body = ? where id = ?',
+      'args': [entry.title, entry.body, entry.id],
+      'database': database,
+    };
+
+    await dio.post<Map<String, dynamic>>(
+      '${baseUrl}exec',
+      data: data,
+      options: options,
+    );
+
+    return;
   }
 }

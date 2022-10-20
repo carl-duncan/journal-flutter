@@ -55,7 +55,7 @@ class HomeCubit extends Cubit<HomeState> {
     return user.userId;
   }
 
-  Future<void> createEntry(String input, AuthCategory category) async {
+  Future<void> createEntry(String input) async {
     isLoading(isLoading: true);
     final title = input.split(' ').take(3).join(' ');
     final body = input.split(' ').skip(3).join(' ');
@@ -86,4 +86,23 @@ class HomeCubit extends Cubit<HomeState> {
   final JournalRepository _repository;
 
   final AuthCategory _category;
+
+  Future<void> updateEntry(Entry entry, String input) async {
+    isLoading(isLoading: true);
+
+    final title = input.split(' ').take(3).join(' ');
+
+    final body = input.split(' ').skip(3).join(' ');
+
+    final updatedEntry = Entry(
+      id: entry.id,
+      title: title,
+      body: body,
+      userId: entry.userId,
+    );
+
+    await _repository.updateEntry(updatedEntry);
+
+    await getEntries();
+  }
 }

@@ -31,11 +31,15 @@ class HomeCategorySelector extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: onEntriesPressed,
-          child: Text(
-            l10n.entries,
-            style: category == HomeCategory.entries
-                ? selectedTextStyle
-                : unselectedTextStyle,
+          child: ColoredBox(
+            key: const Key('homeCategorySelector_entries'),
+            color: Colors.transparent,
+            child: Text(
+              l10n.entries,
+              style: category == HomeCategory.entries
+                  ? selectedTextStyle
+                  : unselectedTextStyle,
+            ),
           ),
         ),
         const SizedBox(width: 5),
@@ -45,11 +49,15 @@ class HomeCategorySelector extends StatelessWidget {
         const SizedBox(width: 5),
         GestureDetector(
           onTap: onGalleryPressed,
-          child: Text(
-            l10n.gallery,
-            style: category == HomeCategory.gallery
-                ? selectedTextStyle
-                : unselectedTextStyle,
+          child: ColoredBox(
+            key: const Key('homeCategorySelector_gallery'),
+            color: Colors.transparent,
+            child: Text(
+              l10n.gallery,
+              style: category == HomeCategory.gallery
+                  ? selectedTextStyle
+                  : unselectedTextStyle,
+            ),
           ),
         ),
       ],
