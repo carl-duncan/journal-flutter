@@ -93,6 +93,7 @@ class _HomeBodyState extends State<HomeBody> {
                           key: const Key('search_bar'),
                           child: TextField(
                             autofocus: true,
+                            onChanged: cubit.searchEntries,
                             decoration: InputDecoration(
                               hintText: l10n.search,
                               prefixIcon: const Icon(Icons.search),

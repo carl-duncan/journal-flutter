@@ -87,8 +87,24 @@ class SingleStoreApi extends JournalApi {
   }
 
   @override
-  Stream<List<Entry>> searchEntries(String query) {
-    throw UnimplementedError();
+  Future<List<Entry>> searchEntries(String query) async {
+    final result = await dio.post<Map<String, dynamic>>(
+      '${baseUrl}query/rows',
+      data: {
+        'sql': 'select * from entries where title like ? or body like ?',
+        'args': ['%$query%', '%$query%'],
+        'database': database,
+      },
+      options: options,
+    );
+
+    final entries = <Entry>[];
+
+    for (final row in result.data!['results'][0]['rows']) {
+      entries.add(Entry.fromJson(row));
+    }
+
+    return entries;
   }
 
   @override

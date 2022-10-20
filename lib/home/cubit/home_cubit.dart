@@ -70,6 +70,16 @@ class HomeCubit extends Cubit<HomeState> {
     await getEntries();
   }
 
+  Future<List<Entry>> searchEntries(String query) async {
+    emit(
+      state.copyWith(
+        entries: await _repository.searchEntries(query),
+        isLoading: false,
+      ),
+    );
+    return state.entries;
+  }
+
   final JournalRepository _repository;
 
   final AuthCategory _category;

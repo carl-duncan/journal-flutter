@@ -18,7 +18,7 @@ abstract class JournalApi {
   Future<List<Entry>> getEntries();
 
   /// search for an Entry by query
-  Stream<List<Entry>> searchEntries(String query);
+  Future<List<Entry>> searchEntries(String query);
 
   /// create an Entry
   Future<void> createEntry(Entry entry);
