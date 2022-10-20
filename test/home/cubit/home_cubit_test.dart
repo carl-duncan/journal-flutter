@@ -113,5 +113,16 @@ void main() {
       expect(cubit.state.entries, isA<List<Entry>>());
       expect(cubit.state.entries, isNotEmpty);
     });
+
+    test('searchEntries', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository, authCategory);
+
+      await cubit.searchEntries('Test');
+
+      expect(cubit.state.entries, isA<List<Entry>>());
+      expect(cubit.state.entries, isNotEmpty);
+    });
   });
 }
