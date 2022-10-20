@@ -20,6 +20,7 @@ void main() {
           onSettingsPressed: () {
             log('onSettingsPressed');
           },
+          isSearchBarVisible: false,
         ),
       );
       expect(find.byType(HomeIsland), findsOneWidget);

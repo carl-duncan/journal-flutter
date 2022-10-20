@@ -67,9 +67,13 @@ void main() {
 
       expect(cubit.state.showSearchBar, isFalse);
 
-      cubit.toggleSearchBar();
+      await cubit.toggleSearchBar();
 
       expect(cubit.state.showSearchBar, isTrue);
+
+      await cubit.toggleSearchBar();
+
+      expect(cubit.state.showSearchBar, isFalse);
     });
 
     test('toggleCategory', () async {

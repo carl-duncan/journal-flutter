@@ -23,9 +23,12 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  void toggleSearchBar() {
+  Future<void> toggleSearchBar() async {
+    final entries = await _repository.getEntries();
+
     emit(
       state.copyWith(
+        entries: entries,
         showSearchBar: !state.showSearchBar,
       ),
     );

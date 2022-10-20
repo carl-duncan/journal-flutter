@@ -6,6 +6,7 @@ class HomeIsland extends StatelessWidget {
     required this.onAddPressed,
     required this.onSearchPressed,
     required this.onSettingsPressed,
+    required this.isSearchBarVisible,
   });
 
   final VoidCallback onAddPressed;
@@ -13,6 +14,8 @@ class HomeIsland extends StatelessWidget {
   final VoidCallback onSearchPressed;
 
   final VoidCallback onSettingsPressed;
+
+  final bool isSearchBarVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +45,8 @@ class HomeIsland extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: onSearchPressed,
-                      child: const Icon(
-                        Icons.search,
+                      child: Icon(
+                        isSearchBarVisible ? Icons.close : Icons.search,
                         color: Colors.white,
                       ),
                     ),

@@ -136,6 +136,7 @@ class _HomeBodyState extends State<HomeBody> {
                 onSettingsPressed: () {
                   log('onSettingsPressed');
                 },
+                isSearchBarVisible: state.showSearchBar,
               ),
             ),
           ],
