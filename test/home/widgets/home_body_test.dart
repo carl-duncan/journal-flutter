@@ -44,6 +44,14 @@ void main() {
                   'updated_at': '0000-00-00 00:00:00',
                   'user_id': '1234'
                 },
+                {
+                  'id': 1,
+                  'title': 'Test Title 2',
+                  'body': 'Body',
+                  'created_at': '0000-00-00 00:00:00',
+                  'updated_at': '0000-00-00 00:00:00',
+                  'user_id': '1234'
+                },
               ]
             }
           ]
@@ -237,7 +245,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(HomeEntryTile));
+    await tester.tap(find.byType(HomeEntryTile).first);
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('editor_modal_save_button')));

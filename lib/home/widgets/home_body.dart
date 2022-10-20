@@ -180,7 +180,11 @@ class _HomeBodyState extends State<HomeBody> {
       final key = DateFormat.MMMM(
         Localizations.localeOf(context).languageCode,
       ).add_y().format(entry.createdAt!);
-      entriesByMonth[key] = [entry];
+      if (entriesByMonth.containsKey(key)) {
+        entriesByMonth[key]!.add(entry);
+      } else {
+        entriesByMonth[key] = [entry];
+      }
     }
     return entriesByMonth;
   }
