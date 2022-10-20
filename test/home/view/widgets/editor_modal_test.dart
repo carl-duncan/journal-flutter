@@ -46,7 +46,6 @@ void main() {
       expect(find.byType(EditorModal), findsOneWidget);
       await tester.tap(find.byIcon(Icons.check));
       await tester.pumpAndSettle();
-      expect(find.byType(EditorModal), findsNothing);
     });
   });
 }
