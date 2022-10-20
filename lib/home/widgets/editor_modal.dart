@@ -9,11 +9,14 @@ class EditorModal extends StatelessWidget {
     this.entry,
     required this.onSave,
     required this.controller,
+    required this.onClose,
   });
 
   final TextEditingController controller;
 
   final VoidCallback onSave;
+
+  final VoidCallback onClose;
 
   final Entry? entry;
 
@@ -41,9 +44,7 @@ class EditorModal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    onTap: onClose,
                     child: const Icon(
                       Icons.close,
                       size: 30,
@@ -58,10 +59,7 @@ class EditorModal extends StatelessWidget {
                   ),
                   // save button
                   InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      onSave();
-                    },
+                    onTap: onSave,
                     child: const Icon(
                       Icons.check,
                       size: 30,

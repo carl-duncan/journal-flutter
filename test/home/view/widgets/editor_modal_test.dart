@@ -13,6 +13,7 @@ void main() {
         EditorModal(
           controller: controller,
           onSave: () {},
+          onClose: () {},
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
@@ -26,12 +27,12 @@ void main() {
         EditorModal(
           controller: controller,
           onSave: () {},
+          onClose: () {},
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
       await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();
-      expect(find.byType(EditorModal), findsNothing);
     });
 
     testWidgets('EditorModal - save', (tester) async {
@@ -39,6 +40,7 @@ void main() {
         EditorModal(
           controller: controller,
           onSave: () {},
+          onClose: () {},
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);

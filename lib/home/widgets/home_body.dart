@@ -146,11 +146,18 @@ class _HomeBodyState extends State<HomeBody> {
   void _toggleEditor(HomeCubit cubit) {
     showBarModalBottomSheet<EditorModal>(
       useRootNavigator: true,
+      isDismissible: false,
+      enableDrag: false,
       context: context,
       animationCurve: Curves.easeInOut,
       builder: (context) => EditorModal(
         onSave: () {
+          Navigator.pop(context);
           cubit.createEntry(_editorController.text, Amplify.Auth);
+        },
+        onClose: () {
+          Navigator.pop(context);
+          _editorController.clear();
         },
         controller: _editorController,
       ),
