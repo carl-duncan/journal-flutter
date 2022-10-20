@@ -56,5 +56,37 @@ void main() {
 
       expect(api.getEntries(), completion(isA<List<Entry>>()));
     });
+
+    test('searchEntries', () {
+      when(
+        () => dio.post<Map<String, dynamic>>(
+          any(),
+          data: any<Map<String, dynamic>>(named: 'data'),
+          options: any(named: 'options'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: ''),
+          data: {
+            'results': [
+              {
+                'rows': [
+                  {
+                    'id': 0,
+                    'title': 'Test Title',
+                    'body': 'Body',
+                    'created_at': '0000-00-00 00:00:00',
+                    'updated_at': '0000-00-00 00:00:00',
+                    'user_id': '1234'
+                  },
+                ]
+              }
+            ]
+          },
+        ),
+      );
+
+      expect(api.searchEntries('test'), completion(isA<List<Entry>>()));
+    });
   });
 }

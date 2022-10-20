@@ -15,11 +15,11 @@ part 'entry.g.dart';
 class Entry extends Equatable {
   /// {@macro entry}
   const Entry({
-    required this.id,
+    this.id,
     required this.title,
     required this.body,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
     required this.userId,
   });
 
@@ -29,7 +29,7 @@ class Entry extends Equatable {
   /// The id of an Entry.
   ///
   /// Defaults to an empty string.
-  final int id;
+  final int? id;
 
   /// The title of an Entry.
   ///
@@ -45,13 +45,13 @@ class Entry extends Equatable {
   ///
   /// Defaults to an empty string.
   @JsonKey(name: 'created_at')
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   /// The updated date of an Entry.
   ///
   /// Defaults to an empty string.
   @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   /// The user id of an Entry.
   ///

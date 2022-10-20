@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/cubit/cubit.dart';
@@ -11,9 +12,12 @@ import 'package:single_store_api/single_store_api.dart';
 
 class MockDio extends Mock implements Dio {}
 
+class MockAuth extends Mock implements AuthCategory {}
+
 void main() {
   group('HomeCubit', () {
     final dio = MockDio();
+    final authCategory = MockAuth();
 
     setUp(
       () => when(
@@ -48,7 +52,7 @@ void main() {
     test('getEntries', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository);
+      final cubit = HomeCubit(repository, authCategory);
 
       await cubit.getEntries();
 
@@ -59,25 +63,98 @@ void main() {
     test('toggleSearchBar', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository);
+      final cubit = HomeCubit(repository, authCategory);
 
       expect(cubit.state.showSearchBar, isFalse);
 
-      cubit.toggleSearchBar();
+      await cubit.toggleSearchBar();
 
       expect(cubit.state.showSearchBar, isTrue);
+
+      await cubit.toggleSearchBar();
+
+      expect(cubit.state.showSearchBar, isFalse);
     });
 
     test('toggleCategory', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository);
+      final cubit = HomeCubit(repository, authCategory);
 
       expect(cubit.state.category, HomeCategory.entries);
 
       cubit.toggleCategory(HomeCategory.gallery);
 
       expect(cubit.state.category, HomeCategory.gallery);
+    });
+
+    test('isLoading', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository, authCategory);
+
+      expect(cubit.state.isLoading, isTrue);
+
+      cubit.isLoading(isLoading: false);
+
+      expect(cubit.state.isLoading, isFalse);
+    });
+
+    test('createEntry', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository, authCategory);
+
+      when(authCategory.getCurrentUser).thenAnswer(
+        (_) async => AuthUser(
+          userId: '1234',
+          username: 'test',
+        ),
+      );
+
+      await cubit.createEntry('Test Message from Carl Duncan');
+
+      expect(cubit.state.entries, isA<List<Entry>>());
+      expect(cubit.state.entries, isNotEmpty);
+    });
+
+    test('searchEntries', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository, authCategory);
+
+      await cubit.searchEntries('Test');
+
+      expect(cubit.state.entries, isA<List<Entry>>());
+      expect(cubit.state.entries, isNotEmpty);
+    });
+
+    test('updateEntry', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      final cubit = HomeCubit(repository, authCategory);
+
+      when(authCategory.getCurrentUser).thenAnswer(
+        (_) async => AuthUser(
+          userId: '1234',
+          username: 'test',
+        ),
+      );
+
+      await cubit.updateEntry(
+        Entry(
+          id: 0,
+          title: 'Test Title',
+          body: 'Body',
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+          userId: '1234',
+        ),
+        'Test Message from Carl Duncan',
+      );
+
+      expect(cubit.state.entries, isA<List<Entry>>());
+      expect(cubit.state.entries, isNotEmpty);
     });
   });
 }

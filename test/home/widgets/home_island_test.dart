@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/widgets/home_island.dart';
 
-import '../../../helpers/helpers.dart';
+import '../../helpers/helpers.dart';
 
 void main() {
   group('HomeIsland', () {
@@ -20,6 +20,7 @@ void main() {
           onSettingsPressed: () {
             log('onSettingsPressed');
           },
+          isSearchBarVisible: false,
         ),
       );
       expect(find.byType(HomeIsland), findsOneWidget);

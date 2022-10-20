@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:journal/home/home.dart';
+import 'package:journal/home/widgets/editor_modal.dart';
+import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/spacers.dart';
 import 'package:journal/res/widgets/custom_scroll_body.dart';
 import 'package:journal_api/journal_api.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 /// {@template home_body}
@@ -24,6 +27,7 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _editorController = TextEditingController();
   var _scrollOffset = 0.0;
 
   @override
@@ -43,8 +47,16 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    _editorController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final cubit = context.read<HomeCubit>();
+    final l10n = context.l10n;
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final entriesByMonth = _getEntriesByMonth(state.entries);
@@ -76,12 +88,14 @@ class _HomeBodyState extends State<HomeBody> {
                     vertical: 25,
                   ),
                   sliver: state.showSearchBar
-                      ? const SliverToBoxAdapter(
-                          key: Key('search_bar'),
+                      ? SliverToBoxAdapter(
+                          key: const Key('search_bar'),
                           child: TextField(
+                            autofocus: true,
+                            onChanged: cubit.searchEntries,
                             decoration: InputDecoration(
-                              hintText: 'Search',
-                              prefixIcon: Icon(Icons.search),
+                              hintText: l10n.search,
+                              prefixIcon: const Icon(Icons.search),
                             ),
                           ),
                         )
@@ -100,6 +114,13 @@ class _HomeBodyState extends State<HomeBody> {
                         return HomeSection(
                           title: entry.key,
                           entries: entry.value,
+                          onEntryTileTap: (Entry entry) {
+                            _editorController.text =
+                                '${entry.title} ${entry.body}';
+                            _toggleEditor(cubit, () {
+                              cubit.updateEntry(entry, _editorController.text);
+                            });
+                          },
                         );
                       }).toList(),
                     ),
@@ -115,12 +136,15 @@ class _HomeBodyState extends State<HomeBody> {
               duration: const Duration(milliseconds: 200),
               child: HomeIsland(
                 onAddPressed: () {
-                  log('onAddPressed');
+                  _toggleEditor(cubit, () {
+                    cubit.createEntry(_editorController.text);
+                  });
                 },
                 onSearchPressed: cubit.toggleSearchBar,
                 onSettingsPressed: () {
                   log('onSettingsPressed');
                 },
+                isSearchBarVisible: state.showSearchBar,
               ),
             ),
           ],
@@ -129,17 +153,37 @@ class _HomeBodyState extends State<HomeBody> {
     );
   }
 
+  void _toggleEditor(HomeCubit cubit, VoidCallback onSave) {
+    showBarModalBottomSheet<EditorModal>(
+      useRootNavigator: true,
+      isDismissible: false,
+      enableDrag: false,
+      context: context,
+      animationCurve: Curves.easeInOut,
+      builder: (context) => EditorModal(
+        onSave: () {
+          Navigator.pop(context);
+          onSave();
+        },
+        onClose: () {
+          Navigator.pop(context);
+          _editorController.clear();
+        },
+        controller: _editorController,
+      ),
+    );
+  }
+
   Map<String, List<Entry>> _getEntriesByMonth(List<Entry> entries) {
     final entriesByMonth = <String, List<Entry>>{};
     for (final entry in entries) {
-      final key = DateFormat.MMMM().add_y().format(entry.createdAt);
+      final key = DateFormat.MMMM(
+        Localizations.localeOf(context).languageCode,
+      ).add_y().format(entry.createdAt!);
       if (entriesByMonth.containsKey(key)) {
         entriesByMonth[key]!.add(entry);
       } else {
         entriesByMonth[key] = [entry];
-      }
-      if (!entriesByMonth[key]!.contains(entry)) {
-        entriesByMonth[key]!.add(entry);
       }
     }
     return entriesByMonth;

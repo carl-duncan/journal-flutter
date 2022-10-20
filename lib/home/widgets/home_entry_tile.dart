@@ -14,46 +14,50 @@ class HomeEntryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dayOfWeek = DateFormat('EEE').format(date);
-    final dayOfMonth = DateFormat('d').format(date);
+    final locale = Localizations.localeOf(context).languageCode;
+    final dayOfWeek = DateFormat('EEE', locale).format(date);
+    final dayOfMonth = DateFormat('d', locale).format(date);
     final dayOfMonthPadded =
         dayOfMonth.length == 1 ? '0$dayOfMonth' : dayOfMonth;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          children: [
-            Text(dayOfWeek, style: const TextStyle(fontSize: 18)),
-            Text(dayOfMonthPadded, style: const TextStyle(fontSize: 30)),
-          ],
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: Container(
-            alignment: Alignment.topLeft,
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  TextSpan(
-                    text: subtitle,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                  ),
-                ],
+    return ColoredBox(
+      color: Colors.transparent,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            children: [
+              Text(dayOfWeek, style: const TextStyle(fontSize: 18)),
+              Text(dayOfMonthPadded, style: const TextStyle(fontSize: 30)),
+            ],
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    TextSpan(
+                      text: subtitle,
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

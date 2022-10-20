@@ -6,6 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,17 +21,22 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dio = Dio();
-    final journalApi = SingleStoreApi(dio: dio);
     return Authenticator(
-      child: RepositoryProvider(
-        create: (context) => JournalRepository(journalApi),
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(
+            create: (context) => JournalRepository(SingleStoreApi(dio: Dio())),
+          ),
+          RepositoryProvider(create: (context) => Amplify.Auth),
+        ],
         child: MaterialApp(
           theme: AppThemes.lightTheme,
           darkTheme: AppThemes.darkTheme,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
           ],
           debugShowCheckedModeBanner: false,
           supportedLocales: AppLocalizations.supportedLocales,

@@ -1,3 +1,4 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:journal/home/cubit/cubit.dart';
@@ -19,7 +20,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit(context.read<JournalRepository>()),
+      create: (context) => HomeCubit(
+        context.read<JournalRepository>(),
+        context.read<AuthCategory>(),
+      ),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: Theme.of(context).brightness == Brightness.dark
             ? SystemUiOverlayStyle.light

@@ -6,9 +6,15 @@ import 'package:journal_api/journal_api.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class HomeSection extends StatelessWidget {
-  const HomeSection({super.key, required this.title, required this.entries});
+  const HomeSection({
+    super.key,
+    required this.title,
+    required this.entries,
+    required this.onEntryTileTap,
+  });
   final String title;
   final List<Entry> entries;
+  final void Function(Entry entry) onEntryTileTap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +37,14 @@ class HomeSection extends StatelessWidget {
                 padding: const EdgeInsets.only(
                   bottom: 20,
                 ),
-                child: HomeEntryTile(
-                  date: entries[index].createdAt,
-                  title: '${entries[index].title} ',
-                  subtitle: entries[index].body,
+                child: GestureDetector(
+                  onTap: () => onEntryTileTap(entries[index]),
+                  key: ValueKey('$index'),
+                  child: HomeEntryTile(
+                    date: entries[index].createdAt!,
+                    title: '${entries[index].title} ',
+                    subtitle: entries[index].body,
+                  ),
                 ),
               );
             },
