@@ -5,11 +5,11 @@ class CustomScrollBody extends StatelessWidget {
     super.key,
     required this.slivers,
     required this.isLoading,
-    required this.controller,
+    this.controller,
   });
   final List<Widget> slivers;
   final bool isLoading;
-  final ScrollController controller;
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {

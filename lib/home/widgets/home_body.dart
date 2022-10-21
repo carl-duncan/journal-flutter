@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +5,9 @@ import 'package:journal/home/home.dart';
 import 'package:journal/home/widgets/editor_modal.dart';
 import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/spacers.dart';
+import 'package:journal/res/utils/transition.dart' show createRoute;
 import 'package:journal/res/widgets/custom_scroll_body.dart';
+import 'package:journal/settings/view/settings_page.dart';
 import 'package:journal_api/journal_api.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -142,7 +142,7 @@ class _HomeBodyState extends State<HomeBody> {
                 },
                 onSearchPressed: cubit.toggleSearchBar,
                 onSettingsPressed: () {
-                  log('onSettingsPressed');
+                  Navigator.push(context, createRoute(const SettingsPage()));
                 },
                 isSearchBarVisible: state.showSearchBar,
               ),
