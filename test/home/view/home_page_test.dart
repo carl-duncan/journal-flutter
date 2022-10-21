@@ -1,4 +1,3 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,24 +5,22 @@ import 'package:journal/home/home.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:single_store_api/single_store_api.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../../helpers/helpers.dart';
 
 class MockDio extends Mock implements Dio {}
 
-class MockAuth extends Mock implements AuthCategory {}
+class MockUserRepository extends Mock implements UserRepository {}
 
 void main() {
   final dio = MockDio();
-  final authCategory = MockAuth();
+  final userRepository = MockUserRepository();
 
   setUpAll(
     () => {
-      when(authCategory.getCurrentUser).thenAnswer(
-        (_) async => AuthUser(
-          userId: '1234',
-          username: 'test',
-        ),
+      when(userRepository.getUserId).thenAnswer(
+        (_) async => '1234',
       ),
       when(
         () => dio.post<Map<String, dynamic>>(
@@ -61,16 +58,9 @@ void main() {
         ),
       ),
       when(
-        authCategory.fetchUserAttributes,
+        userRepository.getEncryptionKey,
       ).thenAnswer(
-        (_) async => List.generate(
-          1,
-          (index) => const AuthUserAttribute(
-            userAttributeKey:
-                CognitoUserAttributeKey.custom('custom:encryption_key'),
-            value: 'test',
-          ),
-        ),
+        (_) async => '1234',
       ),
     },
   );
@@ -84,8 +74,8 @@ void main() {
               SingleStoreApi(dio: dio),
             ),
           ),
-          RepositoryProvider<AuthCategory>(
-            create: (_) => authCategory,
+          RepositoryProvider<UserRepository>(
+            create: (_) => userRepository,
           ),
         ],
         child: const HomePage(),

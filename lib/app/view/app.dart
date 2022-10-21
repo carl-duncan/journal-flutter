@@ -6,7 +6,6 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:amplify_authenticator/amplify_authenticator.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,6 +14,7 @@ import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/app_themes.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:single_store_api/single_store_api.dart';
+import 'package:user_repository/user_repository.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -27,7 +27,7 @@ class App extends StatelessWidget {
           RepositoryProvider(
             create: (context) => JournalRepository(SingleStoreApi(dio: Dio())),
           ),
-          RepositoryProvider(create: (context) => Amplify.Auth),
+          RepositoryProvider(create: (context) => const UserRepository()),
         ],
         child: MaterialApp(
           theme: AppThemes.lightTheme,

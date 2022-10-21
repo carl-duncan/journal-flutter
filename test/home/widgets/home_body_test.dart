@@ -1,4 +1,3 @@
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,24 +10,22 @@ import 'package:journal/res/widgets/custom_scroll_body.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:single_store_api/single_store_api.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../../helpers/helpers.dart';
 
 class MockDio extends Mock implements Dio {}
 
-class MockAuth extends Mock implements AuthCategory {}
+class MockUserRepository extends Mock implements UserRepository {}
 
 void main() {
   final dio = MockDio();
-  final authCategory = MockAuth();
+  final userRepository = MockUserRepository();
 
   setUpAll(
     () => {
-      when(authCategory.getCurrentUser).thenAnswer(
-        (_) async => AuthUser(
-          userId: '1234',
-          username: 'test',
-        ),
+      when(userRepository.getUserId).thenAnswer(
+        (_) async => '1234',
       ),
       when(
         () => dio.post<Map<String, dynamic>>(
@@ -66,16 +63,9 @@ void main() {
         ),
       ),
       when(
-        authCategory.fetchUserAttributes,
+        userRepository.getEncryptionKey,
       ).thenAnswer(
-        (_) async => List.generate(
-          1,
-          (index) => const AuthUserAttribute(
-            userAttributeKey:
-                CognitoUserAttributeKey.custom('custom:encryption_key'),
-            value: 'test',
-          ),
-        ),
+        (_) async => '1234',
       ),
     },
   );
@@ -87,7 +77,7 @@ void main() {
           JournalRepository(
             SingleStoreApi(dio: dio),
           ),
-          authCategory,
+          userRepository,
         ),
         child: const HomeBody(),
       ),
@@ -108,7 +98,7 @@ void main() {
             JournalRepository(
               SingleStoreApi(dio: dio),
             ),
-            authCategory,
+            userRepository,
           ),
           child: const HomeBody(),
         ),
@@ -134,7 +124,7 @@ void main() {
             JournalRepository(
               SingleStoreApi(dio: dio),
             ),
-            authCategory,
+            userRepository,
           ),
           child: const HomeBody(),
         ),
@@ -149,13 +139,6 @@ void main() {
     const width = 1920.0;
     const height = 1080.0;
 
-    when(authCategory.getCurrentUser).thenAnswer(
-      (_) async => AuthUser(
-        userId: '1234',
-        username: 'test',
-      ),
-    );
-
     await tester.binding.setSurfaceSize(const Size(height, width));
 
     await tester.pumpApp(
@@ -165,7 +148,7 @@ void main() {
             JournalRepository(
               SingleStoreApi(dio: dio),
             ),
-            authCategory,
+            userRepository,
           ),
           child: const HomeBody(),
         ),
@@ -204,7 +187,7 @@ void main() {
             JournalRepository(
               SingleStoreApi(dio: dio),
             ),
-            authCategory,
+            userRepository,
           ),
           child: const HomeBody(),
         ),
@@ -220,14 +203,14 @@ void main() {
       Scaffold(
         body: MultiRepositoryProvider(
           providers: [
-            RepositoryProvider(create: (context) => authCategory),
+            RepositoryProvider(create: (context) => userRepository),
           ],
           child: BlocProvider<HomeCubit>(
             create: (_) => HomeCubit(
               JournalRepository(
                 SingleStoreApi(dio: dio),
               ),
-              authCategory,
+              userRepository,
             ),
             child: const HomeBody(),
           ),
@@ -256,7 +239,7 @@ void main() {
             JournalRepository(
               SingleStoreApi(dio: dio),
             ),
-            authCategory,
+            userRepository,
           ),
           child: const HomeBody(),
         ),

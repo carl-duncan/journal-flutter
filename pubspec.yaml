@@ -26,6 +26,8 @@ dependencies:
     path: packages/journal_api
   journal_repository:
     path: packages/journal_repository
+  user_repository:
+    path: packages/user_repository
   modal_bottom_sheet: ^2.1.2
   single_store_api:
       path: packages/single_store_api
