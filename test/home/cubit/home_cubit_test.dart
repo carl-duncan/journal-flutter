@@ -19,41 +19,50 @@ void main() {
     final dio = MockDio();
     final authCategory = MockAuth();
 
-    setUp(
-      () => when(
-        () => dio.post<Map<String, dynamic>>(
-          any(),
-          data: any<Map<String, dynamic>>(named: 'data'),
-          options: any(named: 'options'),
+    setUpAll(
+      () => {
+        when(authCategory.getCurrentUser).thenAnswer(
+          (_) async => AuthUser(
+            userId: '1234',
+            username: 'test',
+          ),
         ),
-      ).thenAnswer(
-        (_) async => Response(
-          requestOptions: RequestOptions(path: ''),
-          data: {
-            'results': [
-              {
-                'rows': [
-                  {
-                    'id': 0,
-                    'title': 'Test Title',
-                    'body': 'Body',
-                    'created_at': '0000-00-00 00:00:00',
-                    'updated_at': '0000-00-00 00:00:00',
-                    'user_id': '1234'
-                  },
-                ]
-              }
-            ]
-          },
-        ),
-      ),
-    );
-
-    when(authCategory.getCurrentUser).thenAnswer(
-      (_) async => AuthUser(
-        userId: '1234',
-        username: 'test',
-      ),
+        when(
+          () => dio.post<Map<String, dynamic>>(
+            any(),
+            data: any<Map<String, dynamic>>(named: 'data'),
+            options: any(named: 'options'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: {
+              'results': [
+                {
+                  'rows': [
+                    {
+                      'id': 0,
+                      'title': 'Test Title',
+                      'body': 'Body',
+                      'created_at': '0000-00-00 00:00:00',
+                      'updated_at': '0000-00-00 00:00:00',
+                      'user_id': '1234'
+                    },
+                    {
+                      'id': 1,
+                      'title': 'Test Title 2',
+                      'body': 'Body',
+                      'created_at': '0000-00-00 00:00:00',
+                      'updated_at': '0000-00-00 00:00:00',
+                      'user_id': '1234'
+                    },
+                  ]
+                }
+              ]
+            },
+          ),
+        )
+      },
     );
 
     test('getEntries', () async {
