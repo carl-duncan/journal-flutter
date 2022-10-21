@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:journal/l10n/l10n.dart';
+import 'package:journal/res/spacers.dart';
 import 'package:journal/res/widgets/custom_scroll_body.dart';
 import 'package:journal/settings/cubit/cubit.dart';
-
-import '../../res/spacers.dart';
 
 /// {@template settings_body}
 /// Body of the SettingsPage.
