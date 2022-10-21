@@ -49,6 +49,13 @@ void main() {
       ),
     );
 
+    when(authCategory.getCurrentUser).thenAnswer(
+      (_) async => AuthUser(
+        userId: '1234',
+        username: 'test',
+      ),
+    );
+
     test('getEntries', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);

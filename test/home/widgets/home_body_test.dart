@@ -60,6 +60,13 @@ void main() {
     ),
   );
 
+  when(authCategory.getCurrentUser).thenAnswer(
+    (_) async => AuthUser(
+      userId: '1234',
+      username: 'test',
+    ),
+  );
+
   testWidgets('HomeBody renders correctly', (tester) async {
     await tester.pumpApp(
       BlocProvider<HomeCubit>(
