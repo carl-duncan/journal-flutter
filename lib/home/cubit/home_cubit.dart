@@ -15,16 +15,19 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> getEntries() async {
+    final encryptionKey = await _getEncryptionKey();
+
     emit(
       state.copyWith(
-        entries: await _repository.getEntries(),
+        entries: await _repository.getEntries(key: encryptionKey),
         isLoading: false,
       ),
     );
   }
 
   Future<void> toggleSearchBar() async {
-    final entries = await _repository.getEntries();
+    final encryptionKey = await _getEncryptionKey();
+    final entries = await _repository.getEntries(key: encryptionKey);
 
     emit(
       state.copyWith(
@@ -55,6 +58,15 @@ class HomeCubit extends Cubit<HomeState> {
     return user.userId;
   }
 
+  Future<String> _getEncryptionKey() async {
+    final attributes = await _category.fetchUserAttributes();
+    final encryptionKey = attributes.firstWhere(
+      (attribute) => attribute.userAttributeKey.key == 'custom:encryption_key',
+    );
+
+    return encryptionKey.value;
+  }
+
   Future<void> createEntry(String input) async {
     isLoading(isLoading: true);
     final title = input.split(' ').take(3).join(' ');
@@ -62,21 +74,24 @@ class HomeCubit extends Cubit<HomeState> {
 
     final userId = await _getUserId();
 
+    final encryptionKey = await _getEncryptionKey();
+
     final entry = Entry(
       title: title,
       body: body,
       userId: userId,
     );
 
-    await _repository.createEntry(entry);
+    await _repository.createEntry(entry, key: encryptionKey);
 
     await getEntries();
   }
 
   Future<List<Entry>> searchEntries(String query) async {
+    final encryptionKey = await _getEncryptionKey();
     emit(
       state.copyWith(
-        entries: await _repository.searchEntries(query),
+        entries: await _repository.searchEntries(query, key: encryptionKey),
         isLoading: false,
       ),
     );
@@ -101,7 +116,9 @@ class HomeCubit extends Cubit<HomeState> {
       userId: entry.userId,
     );
 
-    await _repository.updateEntry(updatedEntry);
+    final encryptionKey = await _getEncryptionKey();
+
+    await _repository.updateEntry(updatedEntry, key: encryptionKey);
 
     await getEntries();
   }

@@ -45,10 +45,11 @@ class SingleStoreApi extends JournalApi {
       );
 
   @override
-  Future<void> createEntry(Entry entry) async {
+  Future<void> createEntry(Entry entry, {required String key}) async {
     final data = {
-      'sql': 'insert into entries (title,body,user_id) values (?,?,?)',
-      'args': [entry.title, entry.body, entry.userId],
+      'sql': 'insert into entries (title,body,user_id) '
+          'values (encodestr(?,?),encodestr(?,?),?)',
+      'args': [entry.title, key, entry.body, key, entry.userId],
       'database': database,
     };
 
@@ -67,11 +68,54 @@ class SingleStoreApi extends JournalApi {
   }
 
   @override
-  Future<List<Entry>> getEntries() async {
+  Future<List<Entry>> getEntries({String? key}) async {
+    const query = 'select id, '
+        'decodestr(title, ?) as title, decodestr(body, ?) as body,'
+        ' created_at, updated_at,user_id '
+        'from entries';
+
+    final result = await dio.post<Map<String, dynamic>>(
+      '${baseUrl}query/rows',
+      data: key != null
+          ? {
+              'sql': query,
+              'args': [key, key],
+              'database': database,
+            }
+          : {
+              'sql': 'select * from entries',
+              'database': database,
+            },
+      options: options,
+    );
+
+    final entries = <Entry>[];
+
+    for (final row in result.data!['results'][0]['rows']) {
+      entries.add(Entry.fromJson(row));
+    }
+
+    return entries;
+  }
+
+  @override
+  Future<List<Entry>> searchEntries(String query, {String? key}) async {
     final result = await dio.post<Map<String, dynamic>>(
       '${baseUrl}query/rows',
       data: {
-        'sql': 'select * from entries',
+        'sql': key != null
+            ? 'select id, '
+                'decodestr(title, ?) as title, decodestr(body, ?) as body,'
+                ' created_at, updated_at,user_id '
+                ' from entries where '
+                'decodestr(title,?) like ? '
+                'or decodestr(body,?) like ?'
+            : 'select * from entries where '
+                'title like ? '
+                'or body like ?',
+        'args': key != null
+            ? [key, key, key, '%$query%', key, '%$query%']
+            : ['%$query%', '%$query%'],
         'database': database,
       },
       options: options,
@@ -87,31 +131,11 @@ class SingleStoreApi extends JournalApi {
   }
 
   @override
-  Future<List<Entry>> searchEntries(String query) async {
-    final result = await dio.post<Map<String, dynamic>>(
-      '${baseUrl}query/rows',
-      data: {
-        'sql': 'select * from entries where title like ? or body like ?',
-        'args': ['%$query%', '%$query%'],
-        'database': database,
-      },
-      options: options,
-    );
-
-    final entries = <Entry>[];
-
-    for (final row in result.data!['results'][0]['rows']) {
-      entries.add(Entry.fromJson(row));
-    }
-
-    return entries;
-  }
-
-  @override
-  Future<void> updateEntry(Entry entry) async {
+  Future<void> updateEntry(Entry entry, {required String key}) async {
     final data = {
-      'sql': 'update entries set title = ?, body = ? where id = ?',
-      'args': [entry.title, entry.body, entry.id],
+      'sql': 'update entries set title = encodestr(?,?), '
+          'body = encodestr(?,?), updated_at = ? where id = ?',
+      'args': [entry.title, key, entry.body, key, entry.updatedAt, entry.id],
       'database': database,
     };
 
