@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/cubit/cubit.dart';
@@ -9,23 +8,21 @@ import 'package:journal_api/journal_api.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:single_store_api/single_store_api.dart';
+import 'package:user_repository/user_repository.dart';
 
 class MockDio extends Mock implements Dio {}
 
-class MockAuth extends Mock implements AuthCategory {}
+class MockUserRepository extends Mock implements UserRepository {}
 
 void main() {
   group('HomeCubit', () {
     final dio = MockDio();
-    final authCategory = MockAuth();
+    final userRepository = MockUserRepository();
 
     setUpAll(
       () => {
-        when(authCategory.getCurrentUser).thenAnswer(
-          (_) async => AuthUser(
-            userId: '1234',
-            username: 'test',
-          ),
+        when(userRepository.getUserId).thenAnswer(
+          (_) async => '1234',
         ),
         when(
           () => dio.post<Map<String, dynamic>>(
@@ -63,16 +60,9 @@ void main() {
           ),
         ),
         when(
-          authCategory.fetchUserAttributes,
+          userRepository.getEncryptionKey,
         ).thenAnswer(
-          (_) async => List.generate(
-            1,
-            (index) => const AuthUserAttribute(
-              userAttributeKey:
-                  CognitoUserAttributeKey.custom('custom:encryption_key'),
-              value: 'test',
-            ),
-          ),
+          (_) async => '1234',
         ),
       },
     );
@@ -80,7 +70,7 @@ void main() {
     test('getEntries', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, authCategory);
+      final cubit = HomeCubit(repository, userRepository);
 
       await cubit.getEntries();
 
@@ -91,7 +81,7 @@ void main() {
     test('toggleSearchBar', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, authCategory);
+      final cubit = HomeCubit(repository, userRepository);
 
       expect(cubit.state.showSearchBar, isFalse);
 
@@ -107,7 +97,7 @@ void main() {
     test('toggleCategory', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, authCategory);
+      final cubit = HomeCubit(repository, userRepository);
 
       expect(cubit.state.category, HomeCategory.entries);
 
@@ -119,7 +109,7 @@ void main() {
     test('isLoading', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, authCategory);
+      final cubit = HomeCubit(repository, userRepository);
 
       expect(cubit.state.isLoading, isTrue);
 
@@ -131,14 +121,7 @@ void main() {
     test('createEntry', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, authCategory);
-
-      when(authCategory.getCurrentUser).thenAnswer(
-        (_) async => AuthUser(
-          userId: '1234',
-          username: 'test',
-        ),
-      );
+      final cubit = HomeCubit(repository, userRepository);
 
       await cubit.createEntry('Test Message from Carl Duncan');
 
@@ -149,7 +132,7 @@ void main() {
     test('searchEntries', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, authCategory);
+      final cubit = HomeCubit(repository, userRepository);
 
       await cubit.searchEntries('Test');
 
@@ -160,14 +143,7 @@ void main() {
     test('updateEntry', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, authCategory);
-
-      when(authCategory.getCurrentUser).thenAnswer(
-        (_) async => AuthUser(
-          userId: '1234',
-          username: 'test',
-        ),
-      );
+      final cubit = HomeCubit(repository, userRepository);
 
       await cubit.updateEntry(
         Entry(
