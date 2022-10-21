@@ -59,7 +59,19 @@ void main() {
             ]
           },
         ),
-      )
+      ),
+      when(
+        authCategory.fetchUserAttributes,
+      ).thenAnswer(
+        (_) async => List.generate(
+          1,
+          (index) => const AuthUserAttribute(
+            userAttributeKey:
+                CognitoUserAttributeKey.custom('custom:encryption_key'),
+            value: 'test',
+          ),
+        ),
+      ),
     },
   );
 

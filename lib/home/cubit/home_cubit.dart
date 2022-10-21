@@ -59,8 +59,12 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<String> _getEncryptionKey() async {
-    final user = await _category.getCurrentUser();
-    return user.userId;
+    final attributes = await _category.fetchUserAttributes();
+    final encryptionKey = attributes.firstWhere(
+      (attribute) => attribute.userAttributeKey.key == 'custom:encryption_key',
+    );
+
+    return encryptionKey.value;
   }
 
   Future<void> createEntry(String input) async {
@@ -112,7 +116,9 @@ class HomeCubit extends Cubit<HomeState> {
       userId: entry.userId,
     );
 
-    await _repository.updateEntry(updatedEntry, key: entry.userId);
+    final encryptionKey = await _getEncryptionKey();
+
+    await _repository.updateEntry(updatedEntry, key: encryptionKey);
 
     await getEntries();
   }
