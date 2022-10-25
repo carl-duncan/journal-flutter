@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/cubit/home_cubit.dart';
 import 'package:journal/home/widgets/home_body.dart';
 import 'package:journal/home/widgets/home_entry_tile.dart';
 import 'package:journal/home/widgets/home_island.dart';
+import 'package:journal/l10n/l10n.dart';
+import 'package:journal/res/app_themes.dart';
 import 'package:journal/res/widgets/custom_scroll_body.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:mocktail/mocktail.dart';
@@ -238,22 +241,30 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(height, width));
 
     await tester.pumpApp(
-      Scaffold(
-        body: MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider<UserRepository>(
-              create: (context) => userRepository,
-            ),
-            RepositoryProvider<JournalRepository>(
-              create: (context) => JournalRepository(SingleStoreApi(dio: dio)),
-            ),
+      MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<UserRepository>(
+            create: (context) => userRepository,
+          ),
+          RepositoryProvider<JournalRepository>(
+            create: (context) => JournalRepository(SingleStoreApi(dio: dio)),
+          ),
+        ],
+        child: MaterialApp(
+          theme: AppThemes.lightTheme,
+          darkTheme: AppThemes.darkTheme,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
           ],
-          child: BlocProvider<HomeCubit>(
-            create: (_) => HomeCubit(
-              JournalRepository(
-                SingleStoreApi(dio: dio),
-              ),
-              userRepository,
+          debugShowCheckedModeBanner: false,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: BlocProvider<HomeCubit>(
+            create: (context) => HomeCubit(
+              context.read<JournalRepository>(),
+              context.read<UserRepository>(),
             ),
             child: const HomeBody(),
           ),

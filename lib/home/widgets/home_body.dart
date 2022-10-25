@@ -180,6 +180,7 @@ class _HomeBodyState extends State<HomeBody> {
         onClose: () {
           Navigator.pop(context);
           _editorController.clear();
+          _titleController.clear();
         },
         bodyController: _editorController,
         titleController: _titleController,
