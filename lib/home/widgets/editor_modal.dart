@@ -1,16 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:journal/l10n/l10n.dart';
-import 'package:journal_api/journal_api.dart';
 
 class EditorModal extends StatelessWidget {
   const EditorModal({
     super.key,
-    this.entry,
     required this.onSave,
     required this.bodyController,
     required this.onClose,
     required this.titleController,
+    required this.isVisualizeVisible,
   });
 
   final TextEditingController bodyController;
@@ -21,7 +21,7 @@ class EditorModal extends StatelessWidget {
 
   final VoidCallback onClose;
 
-  final Entry? entry;
+  final bool isVisualizeVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +73,45 @@ class EditorModal extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 30,
+                height: 15,
               ),
-              // text field for the title of the entry
-
+              if (isVisualizeVisible)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    width: size.width,
+                    alignment: Alignment.center,
+                    color: Theme.of(context).iconTheme.color,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            CupertinoIcons.wand_stars,
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            l10n.visualizeYourEntry,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              const SizedBox(
+                height: 15,
+              ),
               IntrinsicHeight(
                 child: Row(
                   children: [
@@ -108,7 +143,6 @@ class EditorModal extends StatelessWidget {
                   ],
                 ),
               ),
-
               SizedBox(
                 height: size.height * 0.5,
                 child: TextField(

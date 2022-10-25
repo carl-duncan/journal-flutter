@@ -16,12 +16,13 @@ void main() {
           onSave: () {},
           onClose: () {},
           titleController: titleController,
+          isVisualizeVisible: true,
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
       expect(find.byType(TextField).first, findsOneWidget);
       expect(find.byType(TextField).last, findsOneWidget);
-      expect(find.byType(Icon), findsNWidgets(2));
+      expect(find.byType(Icon), findsNWidgets(3));
       expect(find.byType(GestureDetector), findsNWidgets(2));
     });
 
@@ -32,6 +33,7 @@ void main() {
           titleController: titleController,
           onSave: () {},
           onClose: () {},
+          isVisualizeVisible: true,
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
@@ -46,6 +48,7 @@ void main() {
           titleController: titleController,
           onSave: () {},
           onClose: () {},
+          isVisualizeVisible: false,
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);

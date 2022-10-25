@@ -177,14 +177,19 @@ class _HomeBodyState extends State<HomeBody> {
           Navigator.pop(context);
           onSave();
         },
-        onClose: () {
-          Navigator.pop(context);
-          _editorController.clear();
-          _titleController.clear();
-        },
+        onClose: () => Navigator.pop(context),
         bodyController: _editorController,
         titleController: _titleController,
+        isVisualizeVisible: _editorController.text.isNotEmpty &&
+            _titleController.text.isNotEmpty,
       ),
+    ).then(
+      (value) => {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          _editorController.clear();
+          _titleController.clear();
+        })
+      },
     );
   }
 
