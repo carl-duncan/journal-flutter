@@ -56,15 +56,16 @@ class SettingsBody extends StatelessWidget {
                 horizontal: Spacers.hPagePadding,
               ),
               sliver: SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                SettingsTile(
-                  title: l10n.logout,
-                  color: Colors.red,
-                  subtitle: l10n.signOutOfTheJournalAndReturnToTheLoginScreen,
-                  icon: Icons.logout,
-                  onTap: cubit.signOut,
-                )
-              ])),
+                delegate: SliverChildListDelegate.fixed([
+                  SettingsTile(
+                    title: l10n.logout,
+                    color: Colors.red,
+                    subtitle: l10n.signOutOfTheJournalAndReturnToTheLoginScreen,
+                    icon: Icons.logout,
+                    onTap: cubit.signOut,
+                  )
+                ]),
+              ),
             )
           ],
           isLoading: false,

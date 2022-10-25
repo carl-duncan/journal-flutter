@@ -20,17 +20,18 @@ class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: TextButton(
-        key: const Key('button'),
-        child: const Text('Go to new page'),
-        onPressed: () {
-          Navigator.push(
-            context,
-            createRoute(Container()),
-          );
-        },
+      body: Center(
+        child: TextButton(
+          key: const Key('button'),
+          child: const Text('Go to new page'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              createRoute(Container()),
+            );
+          },
+        ),
       ),
-    ));
+    );
   }
 }

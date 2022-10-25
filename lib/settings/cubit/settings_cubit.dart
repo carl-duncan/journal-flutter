@@ -14,6 +14,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     _userRepository.signOut();
   }
 
+  // ignore: unused_field
   final JournalRepository _repository;
 
   final UserRepository _userRepository;
