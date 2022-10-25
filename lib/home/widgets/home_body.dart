@@ -28,6 +28,7 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _editorController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
   var _scrollOffset = 0.0;
 
   @override
@@ -119,10 +120,14 @@ class _HomeBodyState extends State<HomeBody> {
                           title: entry.key,
                           entries: entry.value,
                           onEntryTileTap: (Entry entry) {
-                            _editorController.text =
-                                '${entry.title} ${entry.body}';
+                            _titleController.text = entry.title;
+                            _editorController.text = entry.body;
                             _toggleEditor(cubit, () {
-                              cubit.updateEntry(entry, _editorController.text);
+                              cubit.updateEntry(
+                                entry,
+                                _titleController.text,
+                                _editorController.text,
+                              );
                             });
                           },
                         );
@@ -141,7 +146,10 @@ class _HomeBodyState extends State<HomeBody> {
               child: HomeIsland(
                 onAddPressed: () {
                   _toggleEditor(cubit, () {
-                    cubit.createEntry(_editorController.text);
+                    cubit.createEntry(
+                      _titleController.text,
+                      _editorController.text,
+                    );
                   });
                 },
                 onSearchPressed: cubit.toggleSearchBar,
@@ -173,7 +181,8 @@ class _HomeBodyState extends State<HomeBody> {
           Navigator.pop(context);
           _editorController.clear();
         },
-        controller: _editorController,
+        bodyController: _editorController,
+        titleController: _titleController,
       ),
     );
   }

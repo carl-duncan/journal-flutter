@@ -123,7 +123,7 @@ void main() {
       final repository = JournalRepository(api);
       final cubit = HomeCubit(repository, userRepository);
 
-      await cubit.createEntry('Test Message from Carl Duncan');
+      await cubit.createEntry('Test Title', 'Test Message from Carl Duncan');
 
       expect(cubit.state.entries, isA<List<Entry>>());
       expect(cubit.state.entries, isNotEmpty);
@@ -154,6 +154,7 @@ void main() {
           updatedAt: DateTime.now(),
           userId: '1234',
         ),
+        'Test Title',
         'Test Message from Carl Duncan',
       );
 
