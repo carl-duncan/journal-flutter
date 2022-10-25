@@ -97,6 +97,7 @@ class EditorModal extends StatelessWidget {
                           focusedBorder: InputBorder.none,
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
+                          counterText: '',
                           // remove background color
                           filled: false,
                         ),
@@ -107,6 +108,7 @@ class EditorModal extends StatelessWidget {
                   ],
                 ),
               ),
+
               SizedBox(
                 height: size.height * 0.5,
                 child: TextField(
