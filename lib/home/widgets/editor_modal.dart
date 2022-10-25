@@ -8,11 +8,14 @@ class EditorModal extends StatelessWidget {
     super.key,
     this.entry,
     required this.onSave,
-    required this.controller,
+    required this.bodyController,
     required this.onClose,
+    required this.titleController,
   });
 
-  final TextEditingController controller;
+  final TextEditingController bodyController;
+
+  final TextEditingController titleController;
 
   final VoidCallback onSave;
 
@@ -72,12 +75,47 @@ class EditorModal extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
+              // text field for the title of the entry
+
+              IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        key: const Key('editor_modal_title_field'),
+                        autofocus: true,
+                        controller: titleController,
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                              fontSize: 20,
+                            ),
+                        cursorColor: Theme.of(context).iconTheme.color,
+                        decoration: InputDecoration(
+                          hintText: l10n.enterYourTitleHere,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          counterText: '',
+                          // remove background color
+                          filled: false,
+                        ),
+                        maxLength: 50,
+                        maxLines: null,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               SizedBox(
-                height: size.height * 0.7,
+                height: size.height * 0.5,
                 child: TextField(
                   key: const Key('editor_modal_text_field'),
-                  controller: controller,
+                  controller: bodyController,
                   autofocus: true,
+                  cursorColor: Theme.of(context).iconTheme.color,
                   style: const TextStyle(
                     fontSize: 20,
                   ),

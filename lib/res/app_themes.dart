@@ -5,6 +5,7 @@ class AppThemes {
   static ThemeData lightTheme = ThemeData(
     fontFamily: GoogleFonts.dmSans().fontFamily,
     splashColor: Colors.transparent,
+    primaryColor: const Color(0xFF1E1E1E),
     splashFactory: NoSplash.splashFactory,
     highlightColor: Colors.transparent,
     indicatorColor: Colors.black12,

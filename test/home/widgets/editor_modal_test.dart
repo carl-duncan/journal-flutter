@@ -7,17 +7,20 @@ import '../../helpers/helpers.dart';
 void main() {
   group('EditorModal', () {
     final controller = TextEditingController();
+    final titleController = TextEditingController();
 
     testWidgets('EditorModal', (tester) async {
       await tester.pumpApp(
         EditorModal(
-          controller: controller,
+          bodyController: controller,
           onSave: () {},
           onClose: () {},
+          titleController: titleController,
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
-      expect(find.byType(TextField), findsOneWidget);
+      expect(find.byType(TextField).first, findsOneWidget);
+      expect(find.byType(TextField).last, findsOneWidget);
       expect(find.byType(Icon), findsNWidgets(2));
       expect(find.byType(GestureDetector), findsNWidgets(2));
     });
@@ -25,7 +28,8 @@ void main() {
     testWidgets('EditorModal - close', (tester) async {
       await tester.pumpApp(
         EditorModal(
-          controller: controller,
+          bodyController: controller,
+          titleController: titleController,
           onSave: () {},
           onClose: () {},
         ),
@@ -38,7 +42,8 @@ void main() {
     testWidgets('EditorModal - save', (tester) async {
       await tester.pumpApp(
         EditorModal(
-          controller: controller,
+          bodyController: controller,
+          titleController: titleController,
           onSave: () {},
           onClose: () {},
         ),

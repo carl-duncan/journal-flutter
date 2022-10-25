@@ -17,8 +17,8 @@ class JournalRepository {
   final JournalApi _api;
 
   /// A description for getEntries
-  Future<List<Entry>> getEntries({String? key}) async {
-    return _api.getEntries(key: key);
+  Future<List<Entry>> getEntries(String userId, {String? key}) async {
+    return _api.getEntries(userId, key: key);
   }
 
   /// A description for createEntry
@@ -27,8 +27,12 @@ class JournalRepository {
   }
 
   /// A description for searchEntries
-  Future<List<Entry>> searchEntries(String query, {String? key}) async {
-    return _api.searchEntries(query, key: key);
+  Future<List<Entry>> searchEntries(
+    String query,
+    String userId, {
+    String? key,
+  }) async {
+    return _api.searchEntries(query, userId, key: key);
   }
 
   /// A description for updateEntry

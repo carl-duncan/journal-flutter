@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +5,9 @@ import 'package:journal/home/home.dart';
 import 'package:journal/home/widgets/editor_modal.dart';
 import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/spacers.dart';
+import 'package:journal/res/utils/transition.dart' show createRoute;
 import 'package:journal/res/widgets/custom_scroll_body.dart';
+import 'package:journal/settings/view/settings_page.dart';
 import 'package:journal_api/journal_api.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -28,6 +28,7 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _editorController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
   var _scrollOffset = 0.0;
 
   @override
@@ -93,9 +94,13 @@ class _HomeBodyState extends State<HomeBody> {
                           child: TextField(
                             autofocus: true,
                             onChanged: cubit.searchEntries,
+                            cursorColor: Theme.of(context).iconTheme.color,
                             decoration: InputDecoration(
                               hintText: l10n.search,
-                              prefixIcon: const Icon(Icons.search),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
                             ),
                           ),
                         )
@@ -115,10 +120,14 @@ class _HomeBodyState extends State<HomeBody> {
                           title: entry.key,
                           entries: entry.value,
                           onEntryTileTap: (Entry entry) {
-                            _editorController.text =
-                                '${entry.title} ${entry.body}';
+                            _titleController.text = entry.title;
+                            _editorController.text = entry.body;
                             _toggleEditor(cubit, () {
-                              cubit.updateEntry(entry, _editorController.text);
+                              cubit.updateEntry(
+                                entry,
+                                _titleController.text,
+                                _editorController.text,
+                              );
                             });
                           },
                         );
@@ -137,12 +146,15 @@ class _HomeBodyState extends State<HomeBody> {
               child: HomeIsland(
                 onAddPressed: () {
                   _toggleEditor(cubit, () {
-                    cubit.createEntry(_editorController.text);
+                    cubit.createEntry(
+                      _titleController.text,
+                      _editorController.text,
+                    );
                   });
                 },
                 onSearchPressed: cubit.toggleSearchBar,
                 onSettingsPressed: () {
-                  log('onSettingsPressed');
+                  Navigator.push(context, createRoute(const SettingsPage()));
                 },
                 isSearchBarVisible: state.showSearchBar,
               ),
@@ -168,8 +180,10 @@ class _HomeBodyState extends State<HomeBody> {
         onClose: () {
           Navigator.pop(context);
           _editorController.clear();
+          _titleController.clear();
         },
-        controller: _editorController,
+        bodyController: _editorController,
+        titleController: _titleController,
       ),
     );
   }
