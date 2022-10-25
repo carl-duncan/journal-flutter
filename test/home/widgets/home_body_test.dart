@@ -174,30 +174,6 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('press settings button', (tester) async {
-    const width = 1920.0;
-    const height = 1080.0;
-
-    await tester.binding.setSurfaceSize(const Size(height, width));
-
-    await tester.pumpApp(
-      Scaffold(
-        body: BlocProvider<HomeCubit>(
-          create: (_) => HomeCubit(
-            JournalRepository(
-              SingleStoreApi(dio: dio),
-            ),
-            userRepository,
-          ),
-          child: const HomeBody(),
-        ),
-      ),
-    );
-
-    await tester.tap(find.byIcon(Icons.settings));
-    await tester.pumpAndSettle();
-  });
-
   testWidgets('press homeCategorySelector', (tester) async {
     await tester.pumpApp(
       Scaffold(
@@ -252,6 +228,40 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.tap(find.byKey(const Key('editor_modal_save_button')));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('press settings button', (tester) async {
+    const width = 1920.0;
+    const height = 1080.0;
+
+    await tester.binding.setSurfaceSize(const Size(height, width));
+
+    await tester.pumpApp(
+      Scaffold(
+        body: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<UserRepository>(
+              create: (context) => userRepository,
+            ),
+            RepositoryProvider<JournalRepository>(
+              create: (context) => JournalRepository(SingleStoreApi(dio: dio)),
+            ),
+          ],
+          child: BlocProvider<HomeCubit>(
+            create: (_) => HomeCubit(
+              JournalRepository(
+                SingleStoreApi(dio: dio),
+              ),
+              userRepository,
+            ),
+            child: const HomeBody(),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byIcon(Icons.settings));
     await tester.pumpAndSettle();
   });
 }

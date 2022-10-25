@@ -29,4 +29,9 @@ class UserRepository {
 
     return encryptionKey.value;
   }
+
+  /// A description for signOut
+  Future<void> signOut() async {
+    await Amplify.Auth.signOut();
+  }
 }

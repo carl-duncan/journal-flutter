@@ -93,9 +93,13 @@ class _HomeBodyState extends State<HomeBody> {
                           child: TextField(
                             autofocus: true,
                             onChanged: cubit.searchEntries,
+                            cursorColor: Theme.of(context).iconTheme.color,
                             decoration: InputDecoration(
                               hintText: l10n.search,
-                              prefixIcon: const Icon(Icons.search),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
                             ),
                           ),
                         )

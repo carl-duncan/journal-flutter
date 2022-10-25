@@ -4,5 +4,7 @@
     "gallery": "galería",
     "enterYourTextHere": "Escribe tu texto aquí",
     "search": "Buscar",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "logout": "Cerrar sesión",
+    "signOutOfTheJournalAndReturnToTheLoginScreen": "Cerrar sesión del diario y volver a la pantalla de inicio de sesión"
 }

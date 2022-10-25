@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:journal/settings/cubit/cubit.dart';
 import 'package:journal/settings/widgets/settings_body.dart';
+import 'package:journal_repository/journal_repository.dart';
+import 'package:user_repository/user_repository.dart';
 
 /// {@template settings_page}
 /// A description for SettingsPage
@@ -16,8 +18,11 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SettingsCubit(),
+    return BlocProvider<SettingsCubit>(
+      create: (context) => SettingsCubit(
+        context.read<JournalRepository>(),
+        context.read<UserRepository>(),
+      ),
       child: const Scaffold(
         body: SettingsView(),
       ),

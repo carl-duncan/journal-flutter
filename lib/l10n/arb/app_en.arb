@@ -4,5 +4,7 @@
     "gallery": "gallery",
     "enterYourTextHere": "Enter your text here",
     "search": "search",
-    "settings": "Settings"
+    "settings": "Settings",
+    "logout": "Log out",
+    "signOutOfTheJournalAndReturnToTheLoginScreen": "Sign out of the journal and return to the login screen."
 }
