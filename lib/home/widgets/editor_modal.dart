@@ -76,26 +76,36 @@ class EditorModal extends StatelessWidget {
                 height: 30,
               ),
               // text field for the title of the entry
-              TextField(
-                key: const Key('editor_modal_title_field'),
-                autofocus: true,
-                controller: titleController,
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                      fontSize: 20,
+
+              IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        key: const Key('editor_modal_title_field'),
+                        autofocus: true,
+                        controller: titleController,
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                              fontSize: 20,
+                            ),
+                        cursorColor: Theme.of(context).iconTheme.color,
+                        decoration: InputDecoration(
+                          hintText: l10n.enterYourTitleHere,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          // remove background color
+                          filled: false,
+                        ),
+                        maxLength: 50,
+                        maxLines: null,
+                      ),
                     ),
-                cursorColor: Theme.of(context).iconTheme.color,
-                decoration: InputDecoration(
-                  hintText: l10n.enterYourTitleHere,
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.zero,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  // remove background color
-                  filled: false,
+                  ],
                 ),
-                maxLength: 50,
               ),
               SizedBox(
                 height: size.height * 0.5,
