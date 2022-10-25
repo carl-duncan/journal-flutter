@@ -15,10 +15,10 @@ abstract class JournalApi {
   const JournalApi();
 
   /// get All Entries from a Journal
-  Future<List<Entry>> getEntries({String? key});
+  Future<List<Entry>> getEntries(String userId, {String? key});
 
   /// search for an Entry by query
-  Future<List<Entry>> searchEntries(String query, {String? key});
+  Future<List<Entry>> searchEntries(String query, String userId, {String? key});
 
   /// create an Entry
   Future<void> createEntry(Entry entry, {required String key});

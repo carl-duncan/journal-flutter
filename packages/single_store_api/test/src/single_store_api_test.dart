@@ -54,7 +54,7 @@ void main() {
         ),
       );
 
-      expect(api.getEntries(), completion(isA<List<Entry>>()));
+      expect(api.getEntries(''), completion(isA<List<Entry>>()));
     });
 
     test('searchEntries', () {
@@ -86,7 +86,7 @@ void main() {
         ),
       );
 
-      expect(api.searchEntries('test'), completion(isA<List<Entry>>()));
+      expect(api.searchEntries('test', ''), completion(isA<List<Entry>>()));
     });
   });
 }

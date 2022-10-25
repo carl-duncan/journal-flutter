@@ -17,10 +17,11 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> getEntries() async {
     final encryptionKey = await _userRepository.getEncryptionKey();
+    final userId = await _userRepository.getUserId();
 
     emit(
       state.copyWith(
-        entries: await _repository.getEntries(key: encryptionKey),
+        entries: await _repository.getEntries(userId, key: encryptionKey),
         isLoading: false,
       ),
     );
@@ -28,7 +29,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> toggleSearchBar() async {
     final encryptionKey = await _userRepository.getEncryptionKey();
-    final entries = await _repository.getEntries(key: encryptionKey);
+    final userId = await _userRepository.getUserId();
+    final entries = await _repository.getEntries(userId, key: encryptionKey);
 
     emit(
       state.copyWith(
@@ -72,9 +74,11 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<List<Entry>> searchEntries(String query) async {
     final encryptionKey = await _userRepository.getEncryptionKey();
+    final userId = await _userRepository.getUserId();
     emit(
       state.copyWith(
-        entries: await _repository.searchEntries(query, key: encryptionKey),
+        entries:
+            await _repository.searchEntries(query, userId, key: encryptionKey),
         isLoading: false,
       ),
     );

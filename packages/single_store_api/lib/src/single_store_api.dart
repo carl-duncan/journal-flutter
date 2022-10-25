@@ -68,18 +68,18 @@ class SingleStoreApi extends JournalApi {
   }
 
   @override
-  Future<List<Entry>> getEntries({String? key}) async {
+  Future<List<Entry>> getEntries(String userId, {String? key}) async {
     const query = 'select id, '
         'decodestr(title, ?) as title, decodestr(body, ?) as body,'
         ' created_at, updated_at,user_id '
-        'from entries';
+        'from entries where user_id = ?';
 
     final result = await dio.post<Map<String, dynamic>>(
       '${baseUrl}query/rows',
       data: key != null
           ? {
               'sql': query,
-              'args': [key, key],
+              'args': [key, key, userId],
               'database': database,
             }
           : {
@@ -99,7 +99,11 @@ class SingleStoreApi extends JournalApi {
   }
 
   @override
-  Future<List<Entry>> searchEntries(String query, {String? key}) async {
+  Future<List<Entry>> searchEntries(
+    String query,
+    String userId, {
+    String? key,
+  }) async {
     final result = await dio.post<Map<String, dynamic>>(
       '${baseUrl}query/rows',
       data: {
@@ -109,13 +113,13 @@ class SingleStoreApi extends JournalApi {
                 ' created_at, updated_at,user_id '
                 ' from entries where '
                 'decodestr(title,?) like ? '
-                'or decodestr(body,?) like ?'
+                'or decodestr(body,?) like ? and user_id = ?'
             : 'select * from entries where '
                 'title like ? '
-                'or body like ?',
+                'or body like ? and user_id = ?',
         'args': key != null
-            ? [key, key, key, '%$query%', key, '%$query%']
-            : ['%$query%', '%$query%'],
+            ? [key, key, key, '%$query%', key, '%$query%', userId]
+            : ['%$query%', '%$query%', userId],
         'database': database,
       },
       options: options,
