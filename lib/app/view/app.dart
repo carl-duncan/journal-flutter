@@ -12,6 +12,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:journal/home/home.dart';
 import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/app_themes.dart';
+import 'package:journal/resolvers/localized_button_resolver.dart';
+import 'package:journal/resolvers/localized_country_resolver.dart';
+import 'package:journal/resolvers/localized_input_resolver.dart';
+import 'package:journal/resolvers/localized_title_resolver.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:single_store_api/single_store_api.dart';
 import 'package:user_repository/user_repository.dart';
@@ -21,7 +25,15 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const stringResolver = AuthStringResolver(
+      buttons: LocalizedButtonResolver(),
+      countries: LocalizedCountryResolver(),
+      titles: LocalizedTitleResolver(),
+      inputs: LocalizedInputResolver(),
+    );
+
     return Authenticator(
+      stringResolver: stringResolver,
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider(
