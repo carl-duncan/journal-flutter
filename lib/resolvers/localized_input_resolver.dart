@@ -16,7 +16,7 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 
-import '../l10n/l10n.dart';
+import 'package:journal/l10n/l10n.dart';
 
 class LocalizedInputResolver extends InputResolver {
   const LocalizedInputResolver();
