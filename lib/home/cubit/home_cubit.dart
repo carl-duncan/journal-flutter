@@ -57,6 +57,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> createEntry(String title, String body) async {
+    isLoading(isLoading: true);
+
     final userId = await _userRepository.getUserId();
 
     final encryptionKey = await _userRepository.getEncryptionKey();
