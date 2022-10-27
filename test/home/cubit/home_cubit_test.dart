@@ -136,8 +136,8 @@ void main() {
 
       await cubit.searchEntries('Test');
 
-      expect(cubit.state.entries, isA<List<Entry>>());
-      expect(cubit.state.entries, isNotEmpty);
+      expect(cubit.state.searchEntries, isA<List<Entry>>());
+      expect(cubit.state.searchEntries, isNotEmpty);
     });
 
     test('updateEntry', () async {

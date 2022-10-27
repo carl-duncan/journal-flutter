@@ -60,7 +60,9 @@ class _HomeBodyState extends State<HomeBody> {
     final l10n = context.l10n;
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        final entriesByMonth = _getEntriesByMonth(state.entries);
+        final entriesByMonth = state.showSearchBar
+            ? _getEntriesByMonth(state.searchEntries)
+            : _getEntriesByMonth(state.entries);
         return Stack(
           children: [
             CustomScrollBody(

@@ -28,13 +28,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> toggleSearchBar() async {
-    final encryptionKey = await _userRepository.getEncryptionKey();
-    final userId = await _userRepository.getUserId();
-    final entries = await _repository.getEntries(userId, key: encryptionKey);
-
     emit(
       state.copyWith(
-        entries: entries,
         showSearchBar: !state.showSearchBar,
       ),
     );
@@ -79,7 +74,7 @@ class HomeCubit extends Cubit<HomeState> {
     final userId = await _userRepository.getUserId();
     emit(
       state.copyWith(
-        entries:
+        searchEntries:
             await _repository.searchEntries(query, userId, key: encryptionKey),
         isLoading: false,
       ),
