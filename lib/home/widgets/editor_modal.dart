@@ -121,7 +121,7 @@ class EditorModal extends StatelessWidget {
                         autofocus: true,
                         controller: titleController,
                         style: Theme.of(context).textTheme.headline6!.copyWith(
-                              fontSize: 20,
+                              fontSize: 24,
                             ),
                         cursorColor: Theme.of(context).iconTheme.color,
                         decoration: InputDecoration(
@@ -142,6 +142,9 @@ class EditorModal extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 15,
               ),
               SizedBox(
                 height: size.height * 0.5,
