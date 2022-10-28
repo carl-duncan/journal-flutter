@@ -122,15 +122,17 @@ class _HomeBodyState extends State<HomeBody> {
                           title: entry.key,
                           entries: entry.value,
                           onEntryTileTap: (Entry entry) {
-                            _titleController.text = entry.title;
-                            _editorController.text = entry.body;
-                            _toggleEditor(cubit, () {
-                              cubit.updateEntry(
-                                entry,
-                                _titleController.text,
-                                _editorController.text,
-                              );
-                            });
+                            if (cubit.hasKey()) {
+                              _titleController.text = entry.title;
+                              _editorController.text = entry.body;
+                              _toggleEditor(cubit, () {
+                                cubit.updateEntry(
+                                  entry,
+                                  _titleController.text,
+                                  _editorController.text,
+                                );
+                              });
+                            }
                           },
                         );
                       }).toList(),
@@ -147,12 +149,14 @@ class _HomeBodyState extends State<HomeBody> {
               duration: const Duration(milliseconds: 200),
               child: HomeIsland(
                 onAddPressed: () {
-                  _toggleEditor(cubit, () {
-                    cubit.createEntry(
-                      _titleController.text,
-                      _editorController.text,
-                    );
-                  });
+                  if (cubit.hasKey()) {
+                    _toggleEditor(cubit, () {
+                      cubit.createEntry(
+                        _titleController.text,
+                        _editorController.text,
+                      );
+                    });
+                  }
                 },
                 onSearchPressed: cubit.toggleSearchBar,
                 onSettingsPressed: () {

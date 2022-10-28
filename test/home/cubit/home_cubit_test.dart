@@ -6,6 +6,7 @@ import 'package:journal/home/cubit/cubit.dart';
 import 'package:journal/home/widgets/home_category_selector.dart';
 import 'package:journal_api/journal_api.dart';
 import 'package:journal_repository/journal_repository.dart';
+import 'package:key_store_repository/key_store_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:single_store_api/single_store_api.dart';
 import 'package:user_repository/user_repository.dart';
@@ -14,10 +15,13 @@ class MockDio extends Mock implements Dio {}
 
 class MockUserRepository extends Mock implements UserRepository {}
 
+class MockKeyStoreRepository extends Mock implements KeyStoreRepository {}
+
 void main() {
   group('HomeCubit', () {
     final dio = MockDio();
     final userRepository = MockUserRepository();
+    final keyStoreRepository = MockKeyStoreRepository();
 
     setUpAll(
       () => {
@@ -59,18 +63,15 @@ void main() {
             },
           ),
         ),
-        when(
-          userRepository.getEncryptionKey,
-        ).thenAnswer(
-          (_) async => '1234',
-        ),
+        when(keyStoreRepository.initialize).thenAnswer((_) async => true),
+        when(() => keyStoreRepository.get(any())).thenAnswer((_) => '1234'),
       },
     );
 
     test('getEntries', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, userRepository);
+      final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
       await cubit.getEntries();
 
@@ -81,7 +82,7 @@ void main() {
     test('toggleSearchBar', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, userRepository);
+      final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
       expect(cubit.state.showSearchBar, isFalse);
 
@@ -97,7 +98,7 @@ void main() {
     test('toggleCategory', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, userRepository);
+      final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
       expect(cubit.state.category, HomeCategory.entries);
 
@@ -109,7 +110,7 @@ void main() {
     test('isLoading', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, userRepository);
+      final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
       expect(cubit.state.isLoading, isTrue);
 
@@ -121,7 +122,7 @@ void main() {
     test('createEntry', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, userRepository);
+      final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
       await cubit.createEntry('Test Title', 'Test Message from Carl Duncan');
 
@@ -132,7 +133,7 @@ void main() {
     test('searchEntries', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, userRepository);
+      final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
       await cubit.searchEntries('Test');
 
@@ -143,7 +144,7 @@ void main() {
     test('updateEntry', () async {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
-      final cubit = HomeCubit(repository, userRepository);
+      final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
       await cubit.updateEntry(
         Entry(

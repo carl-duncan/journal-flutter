@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_api/hive_api.dart';
 import 'package:journal/home/cubit/home_cubit.dart';
 import 'package:journal/home/widgets/home_body.dart';
 import 'package:journal/home/widgets/home_entry_tile.dart';
@@ -11,6 +12,7 @@ import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/app_themes.dart';
 import 'package:journal/res/widgets/custom_scroll_body.dart';
 import 'package:journal_repository/journal_repository.dart';
+import 'package:key_store_repository/key_store_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:single_store_api/single_store_api.dart';
 import 'package:user_repository/user_repository.dart';
@@ -21,9 +23,12 @@ class MockDio extends Mock implements Dio {}
 
 class MockUserRepository extends Mock implements UserRepository {}
 
+class HiveApiMock extends Mock implements HiveApi {}
+
 void main() {
   final dio = MockDio();
   final userRepository = MockUserRepository();
+  final hiveApi = HiveApiMock();
 
   setUpAll(
     () => {
@@ -65,11 +70,8 @@ void main() {
           },
         ),
       ),
-      when(
-        userRepository.getEncryptionKey,
-      ).thenAnswer(
-        (_) async => '1234',
-      ),
+      when(hiveApi.initialize).thenAnswer((_) async => true),
+      when(() => hiveApi.get(any())).thenAnswer((_) => '1234'),
     },
   );
 
@@ -81,6 +83,9 @@ void main() {
             SingleStoreApi(dio: dio),
           ),
           userRepository,
+          KeyStoreRepository(
+            hiveApi,
+          ),
         ),
         child: const HomeBody(),
       ),
@@ -102,6 +107,9 @@ void main() {
               SingleStoreApi(dio: dio),
             ),
             userRepository,
+            KeyStoreRepository(
+              hiveApi,
+            ),
           ),
           child: const HomeBody(),
         ),
@@ -128,6 +136,9 @@ void main() {
               SingleStoreApi(dio: dio),
             ),
             userRepository,
+            KeyStoreRepository(
+              hiveApi,
+            ),
           ),
           child: const HomeBody(),
         ),
@@ -152,6 +163,9 @@ void main() {
               SingleStoreApi(dio: dio),
             ),
             userRepository,
+            KeyStoreRepository(
+              hiveApi,
+            ),
           ),
           child: const HomeBody(),
         ),
@@ -190,6 +204,9 @@ void main() {
                 SingleStoreApi(dio: dio),
               ),
               userRepository,
+              KeyStoreRepository(
+                hiveApi,
+              ),
             ),
             child: const HomeBody(),
           ),
@@ -219,6 +236,9 @@ void main() {
               SingleStoreApi(dio: dio),
             ),
             userRepository,
+            KeyStoreRepository(
+              hiveApi,
+            ),
           ),
           child: const HomeBody(),
         ),
@@ -249,6 +269,9 @@ void main() {
           RepositoryProvider<JournalRepository>(
             create: (context) => JournalRepository(SingleStoreApi(dio: dio)),
           ),
+          RepositoryProvider<KeyStoreRepository>(
+            create: (context) => KeyStoreRepository(hiveApi),
+          ),
         ],
         child: MaterialApp(
           theme: AppThemes.lightTheme,
@@ -265,6 +288,7 @@ void main() {
             create: (context) => HomeCubit(
               context.read<JournalRepository>(),
               context.read<UserRepository>(),
+              context.read<KeyStoreRepository>(),
             ),
             child: const HomeBody(),
           ),

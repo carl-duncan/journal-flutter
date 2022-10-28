@@ -20,16 +20,6 @@ class UserRepository {
     return user.userId;
   }
 
-  /// A description for getEncryptionKey
-  Future<String> getEncryptionKey() async {
-    final attributes = await Amplify.Auth.fetchUserAttributes();
-    final encryptionKey = attributes.firstWhere(
-      (attribute) => attribute.userAttributeKey.key == 'custom:encryption_key',
-    );
-
-    return encryptionKey.value;
-  }
-
   /// A description for signOut
   Future<void> signOut() async {
     await Amplify.Auth.signOut();
