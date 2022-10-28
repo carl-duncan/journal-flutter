@@ -115,6 +115,8 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
+
     expect(find.byType(HomeIsland), findsOneWidget);
     await tester.pumpAndSettle();
     await tester.drag(find.byType(CustomScrollBody), const Offset(0, -100));
@@ -145,6 +147,8 @@ void main() {
       ),
     );
 
+    await tester.pumpAndSettle();
+
     await tester.tap(find.byIcon(Icons.search));
     await tester.pumpAndSettle();
   });
@@ -171,6 +175,8 @@ void main() {
         ),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
@@ -296,7 +302,57 @@ void main() {
       ),
     );
 
+    await tester.pumpAndSettle();
+
     await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('press locked button', (tester) async {
+    const width = 1920.0;
+    const height = 1080.0;
+
+    await tester.binding.setSurfaceSize(const Size(height, width));
+
+    await tester.pumpApp(
+      MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<UserRepository>(
+            create: (context) => userRepository,
+          ),
+          RepositoryProvider<JournalRepository>(
+            create: (context) => JournalRepository(SingleStoreApi(dio: dio)),
+          ),
+          RepositoryProvider<KeyStoreRepository>(
+            create: (context) => KeyStoreRepository(hiveApi),
+          ),
+        ],
+        child: MaterialApp(
+          theme: AppThemes.lightTheme,
+          darkTheme: AppThemes.darkTheme,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          debugShowCheckedModeBanner: false,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: BlocProvider<HomeCubit>(
+            create: (context) => HomeCubit(
+              context.read<JournalRepository>(),
+              context.read<UserRepository>(),
+              context.read<KeyStoreRepository>(),
+            ),
+            child: const HomeBody(),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.lock));
     await tester.pumpAndSettle();
   });
 }

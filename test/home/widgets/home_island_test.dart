@@ -21,11 +21,15 @@ void main() {
             log('onSettingsPressed');
           },
           isSearchBarVisible: false,
+          onLockPressed: () {
+            log('onLockPressed');
+          },
+          isLocked: true,
         ),
       );
       expect(find.byType(HomeIsland), findsOneWidget);
-      expect(find.byType(Icon), findsNWidgets(3));
-      expect(find.byType(GestureDetector), findsNWidgets(3));
+      expect(find.byType(Icon), findsNWidgets(4));
+      expect(find.byType(GestureDetector), findsNWidgets(4));
     });
   });
 }

@@ -115,24 +115,22 @@ class _HomeBodyState extends State<HomeBody> {
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: Spacers.hPagePadding,
-                    ),
+                    ).copyWith(bottom: 150),
                     sliver: MultiSliver(
                       children: entriesByMonth.entries.map((entry) {
                         return HomeSection(
                           title: entry.key,
                           entries: entry.value,
                           onEntryTileTap: (Entry entry) {
-                            if (cubit.hasKey()) {
-                              _titleController.text = entry.title;
-                              _editorController.text = entry.body;
-                              _toggleEditor(cubit, () {
-                                cubit.updateEntry(
-                                  entry,
-                                  _titleController.text,
-                                  _editorController.text,
-                                );
-                              });
-                            }
+                            _titleController.text = entry.title;
+                            _editorController.text = entry.body;
+                            _toggleEditor(cubit, () {
+                              cubit.updateEntry(
+                                entry,
+                                _titleController.text,
+                                _editorController.text,
+                              );
+                            });
                           },
                         );
                       }).toList(),
@@ -142,28 +140,33 @@ class _HomeBodyState extends State<HomeBody> {
             ),
             AnimatedPositioned(
               bottom: 0,
-              left: 100,
-              right: 100,
+              left: 50,
+              right: 50,
               curve: Curves.bounceInOut,
               top: MediaQuery.of(context).size.height * 0.85 - _scrollOffset,
               duration: const Duration(milliseconds: 200),
-              child: HomeIsland(
-                onAddPressed: () {
-                  if (cubit.hasKey()) {
-                    _toggleEditor(cubit, () {
-                      cubit.createEntry(
-                        _titleController.text,
-                        _editorController.text,
-                      );
-                    });
-                  }
-                },
-                onSearchPressed: cubit.toggleSearchBar,
-                onSettingsPressed: () {
-                  Navigator.push(context, createRoute(const SettingsPage()));
-                },
-                isSearchBarVisible: state.showSearchBar,
-              ),
+              child: !state.isLoading
+                  ? HomeIsland(
+                      onAddPressed: () {
+                        _toggleEditor(cubit, () {
+                          cubit.createEntry(
+                            _titleController.text,
+                            _editorController.text,
+                          );
+                        });
+                      },
+                      onSearchPressed: cubit.toggleSearchBar,
+                      onSettingsPressed: () {
+                        Navigator.push(
+                          context,
+                          createRoute(const SettingsPage()),
+                        );
+                      },
+                      isSearchBarVisible: state.showSearchBar,
+                      onLockPressed: cubit.toggleLock,
+                      isLocked: state.isLocked,
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         );

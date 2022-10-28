@@ -18,12 +18,12 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> init() async {
     await _keyStoreRepository.initialize();
-
     await getEntries();
   }
 
+  String? get encryptionKey => _keyStoreRepository.get(_encryptionKey);
+
   Future<void> getEntries() async {
-    final encryptionKey = _keyStoreRepository.get(_encryptionKey);
     final userId = await _userRepository.getUserId();
 
     emit(
@@ -33,8 +33,6 @@ class HomeCubit extends Cubit<HomeState> {
       ),
     );
   }
-
-  bool hasKey() => _keyStoreRepository.get(_encryptionKey) != null;
 
   Future<void> toggleSearchBar() async {
     emit(
@@ -60,12 +58,43 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
+  Future<void> toggleLock() async {
+    if (state.isLocked) {
+      final entries = await _repository.getEntries(
+        await _userRepository.getUserId(),
+        key: _keyStoreRepository.get(_encryptionKey),
+      );
+
+      emit(
+        state.copyWith(
+          isLocked: false,
+          entries: entries,
+          showSearchBar: false,
+          searchEntries: [],
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          isLocked: true,
+          entries: await _repository.getEntries(
+            await _userRepository.getUserId(),
+          ),
+          showSearchBar: false,
+          searchEntries: [],
+        ),
+      );
+    }
+  }
+
   Future<void> createEntry(String title, String body) async {
     isLoading(isLoading: true);
 
     final userId = await _userRepository.getUserId();
 
-    final encryptionKey = _keyStoreRepository.get(_encryptionKey);
+    if (encryptionKey == null) {
+      return;
+    }
 
     final entry = Entry(
       title: title,
@@ -79,7 +108,6 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<List<Entry>> searchEntries(String query) async {
-    final encryptionKey = _keyStoreRepository.get(_encryptionKey);
     final userId = await _userRepository.getUserId();
     emit(
       state.copyWith(
@@ -108,8 +136,6 @@ class HomeCubit extends Cubit<HomeState> {
       body: body,
       userId: entry.userId,
     );
-
-    final encryptionKey = _keyStoreRepository.get(_encryptionKey);
 
     await _repository.updateEntry(updatedEntry, key: encryptionKey!);
 

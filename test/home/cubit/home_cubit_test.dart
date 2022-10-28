@@ -124,6 +124,10 @@ void main() {
       final repository = JournalRepository(api);
       final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
+      await cubit.toggleLock();
+      await cubit.toggleLock();
+      await cubit.toggleLock();
+
       await cubit.createEntry('Test Title', 'Test Message from Carl Duncan');
 
       expect(cubit.state.entries, isA<List<Entry>>());
@@ -145,6 +149,8 @@ void main() {
       final api = SingleStoreApi(dio: dio);
       final repository = JournalRepository(api);
       final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
+
+      await cubit.toggleLock();
 
       await cubit.updateEntry(
         Entry(
