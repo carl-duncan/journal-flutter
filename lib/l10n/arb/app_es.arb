@@ -29,5 +29,6 @@
     "username": "Nombre de usuario",
     "password": "Contraseña",
     "email": "Correo electrónico",
-    "confirmPassword": "Confirmar contraseña"
+    "confirmPassword": "Confirmar contraseña",
+    "editorLocked": "La edición está deshabilitada"
 }

@@ -30,5 +30,6 @@
     "password": "Password",
     "email": "Email",
     "confirmPassword": "Confirm Password",
-    "customAuthChallenge": "Custom Auth Challenge"
+    "customAuthChallenge": "Custom Auth Challenge",
+    "editorLocked": "Editing is disabled"
 }

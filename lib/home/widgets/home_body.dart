@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -85,37 +86,73 @@ class _HomeBodyState extends State<HomeBody> {
                     ),
                   ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Spacers.hPagePadding,
-                    vertical: 25,
-                  ),
-                  sliver: state.showSearchBar
-                      ? SliverToBoxAdapter(
-                          key: const Key('search_bar'),
-                          child: TextField(
-                            autofocus: true,
-                            onChanged: cubit.searchEntries,
-                            cursorColor: Theme.of(context).iconTheme.color,
-                            decoration: InputDecoration(
-                              hintText: l10n.search,
-                              prefixIcon: Icon(
-                                Icons.search,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                            ),
+                if (state.showSearchBar)
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Spacers.hPagePadding,
+                      vertical: 25,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      key: const Key('search_bar'),
+                      child: TextField(
+                        autofocus: true,
+                        onChanged: cubit.searchEntries,
+                        cursorColor: Theme.of(context).iconTheme.color,
+                        decoration: InputDecoration(
+                          hintText: l10n.search,
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Theme.of(context).iconTheme.color,
                           ),
-                        )
-                      : const SliverToBoxAdapter(
-                          key: Key('no_search_bar'),
-                          child: SizedBox.shrink(),
                         ),
-                ),
+                      ),
+                    ),
+                  ),
+                if (state.isLocked)
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      top: state.showSearchBar ? 0 : 30,
+                      bottom: state.showSearchBar ? 30 : 0,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Theme.of(context).iconTheme.color,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                CupertinoIcons.pencil,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                l10n.editorLocked,
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w500,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 if (state.category == HomeCategory.entries)
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: Spacers.hPagePadding,
-                    ).copyWith(bottom: 150),
+                    ).copyWith(bottom: 150, top: state.showSearchBar ? 0 : 40),
                     sliver: MultiSliver(
                       children: entriesByMonth.entries.map((entry) {
                         return HomeSection(
