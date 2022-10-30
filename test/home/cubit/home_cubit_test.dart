@@ -125,10 +125,14 @@ void main() {
       final cubit = HomeCubit(repository, userRepository, keyStoreRepository);
 
       await cubit.toggleLock();
-      await cubit.toggleLock();
+
+      await cubit.createEntry('Test Title', 'Test Message from Carl Duncan');
+
       await cubit.toggleLock();
 
       await cubit.createEntry('Test Title', 'Test Message from Carl Duncan');
+
+      await cubit.toggleLock();
 
       expect(cubit.state.entries, isA<List<Entry>>());
       expect(cubit.state.entries, isNotEmpty);

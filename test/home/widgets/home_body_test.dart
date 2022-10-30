@@ -195,6 +195,18 @@ void main() {
 
     await tester.tap(find.byKey(const Key('editor_modal_save_button')));
     await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.lock));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(textField, 'Test Title for Carl Duncan');
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('editor_modal_save_button')));
+    await tester.pumpAndSettle();
   });
 
   testWidgets('press homeCategorySelector', (tester) async {

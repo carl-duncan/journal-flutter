@@ -21,14 +21,18 @@ class HomeCubit extends Cubit<HomeState> {
     await getEntries();
   }
 
-  String? get encryptionKey => _keyStoreRepository.get(_encryptionKey);
+  String? get encryptionKey =>
+      state.isLocked ? null : _keyStoreRepository.get(_encryptionKey);
 
   Future<void> getEntries() async {
     final userId = await _userRepository.getUserId();
 
     emit(
       state.copyWith(
-        entries: await _repository.getEntries(userId, key: encryptionKey),
+        entries: await _repository.getEntries(
+          userId,
+          key: encryptionKey,
+        ),
         isLoading: false,
       ),
     );
@@ -93,6 +97,7 @@ class HomeCubit extends Cubit<HomeState> {
     final userId = await _userRepository.getUserId();
 
     if (encryptionKey == null) {
+      isLoading(isLoading: false);
       return;
     }
 
@@ -111,8 +116,11 @@ class HomeCubit extends Cubit<HomeState> {
     final userId = await _userRepository.getUserId();
     emit(
       state.copyWith(
-        searchEntries:
-            await _repository.searchEntries(query, userId, key: encryptionKey),
+        searchEntries: await _repository.searchEntries(
+          query,
+          userId,
+          key: encryptionKey,
+        ),
         isLoading: false,
       ),
     );
@@ -136,6 +144,11 @@ class HomeCubit extends Cubit<HomeState> {
       body: body,
       userId: entry.userId,
     );
+
+    if (encryptionKey == null) {
+      isLoading(isLoading: false);
+      return;
+    }
 
     await _repository.updateEntry(updatedEntry, key: encryptionKey!);
 
