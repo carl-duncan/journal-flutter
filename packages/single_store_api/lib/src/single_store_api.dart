@@ -83,8 +83,9 @@ class SingleStoreApi extends JournalApi {
               'database': database,
             }
           : {
-              'sql': 'select * from entries',
+              'sql': 'select * from entries where user_id = ?',
               'database': database,
+              'args': [userId],
             },
       options: options,
     );
@@ -115,11 +116,15 @@ class SingleStoreApi extends JournalApi {
                 'decodestr(title,?) like ? '
                 'or decodestr(body,?) like ? and user_id = ?'
             : 'select * from entries where '
-                'title like ? '
-                'or body like ? and user_id = ?',
+                'user_id = ? and (title like ? '
+                'or body like ?)',
         'args': key != null
             ? [key, key, key, '%$query%', key, '%$query%', userId]
-            : ['%$query%', '%$query%', userId],
+            : [
+                userId,
+                '%$query%',
+                '%$query%',
+              ],
         'database': database,
       },
       options: options,
