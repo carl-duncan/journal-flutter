@@ -7,6 +7,7 @@
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:key_store_api/key_store_api.dart';
+import 'package:uuid/uuid.dart';
 
 /// {@template hive_api}
 /// A Very Good Project created by Very Good CLI.
@@ -40,5 +41,16 @@ class HiveApi implements KeyStoreApi {
   @override
   void set(String key, String value) {
     _getHiveBox().put(key, value);
+  }
+
+  @override
+  void delete(String key) {
+    _getHiveBox().delete(key);
+  }
+
+  @override
+  String generate(String key) {
+    set(key, const Uuid().v4());
+    return get(key)!;
   }
 }

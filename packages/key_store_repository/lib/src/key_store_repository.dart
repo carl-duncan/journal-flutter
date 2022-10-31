@@ -30,4 +30,9 @@ class KeyStoreRepository {
   void set(String key, String value) {
     return _api.set(key, value);
   }
+
+  /// A description for delete
+  void delete(String key) {
+    return _api.delete(key);
+  }
 }

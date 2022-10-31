@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:journal/home/home.dart';
 import 'package:journal/home/widgets/editor_modal.dart';
+import 'package:journal/home/widgets/locked_banner.dart';
+import 'package:journal/home/widgets/onboarding_body.dart';
 import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/spacers.dart';
 import 'package:journal/res/utils/transition.dart' show createRoute;
@@ -66,115 +67,102 @@ class _HomeBodyState extends State<HomeBody> {
             : _getEntriesByMonth(state.entries);
         return Stack(
           children: [
-            CustomScrollBody(
-              controller: _scrollController,
-              isLoading: state.isLoading,
-              slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                    top: 60,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: HomeCategorySelector(
-                      category: state.category,
-                      onEntriesPressed: () => cubit.toggleCategory(
-                        HomeCategory.entries,
-                      ),
-                      onGalleryPressed: () => cubit.toggleCategory(
-                        HomeCategory.gallery,
+            if (cubit.keyExists())
+              CustomScrollBody(
+                controller: _scrollController,
+                isLoading: state.isLoading,
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                      top: 60,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: HomeCategorySelector(
+                        category: state.category,
+                        onEntriesPressed: () => cubit.toggleCategory(
+                          HomeCategory.entries,
+                        ),
+                        onGalleryPressed: () => cubit.toggleCategory(
+                          HomeCategory.gallery,
+                        ),
                       ),
                     ),
                   ),
+                  if (state.showSearchBar)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Spacers.hPagePadding,
+                        vertical: 25,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        key: const Key('search_bar'),
+                        child: TextField(
+                          autofocus: true,
+                          onChanged: cubit.searchEntries,
+                          cursorColor: Theme.of(context).iconTheme.color,
+                          decoration: InputDecoration(
+                            hintText: l10n.search,
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: Theme.of(context).iconTheme.color,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (state.isLocked)
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        top: state.showSearchBar ? 0 : 30,
+                        bottom: state.showSearchBar ? 30 : 0,
+                      ),
+                      sliver: const SliverToBoxAdapter(
+                        child: LockedBanner(),
+                      ),
+                    ),
+                  if (state.category == HomeCategory.entries)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Spacers.hPagePadding,
+                      ).copyWith(
+                        bottom: 150,
+                        top: state.showSearchBar ? 0 : 40,
+                      ),
+                      sliver: MultiSliver(
+                        children: entriesByMonth.entries.map((entry) {
+                          return HomeSection(
+                            title: entry.key,
+                            entries: entry.value,
+                            onEntryTileTap: (Entry entry) {
+                              _titleController.text = entry.title;
+                              _editorController.text = entry.body;
+                              _toggleEditor(cubit, () {
+                                cubit.updateEntry(
+                                  entry,
+                                  _titleController.text,
+                                  _editorController.text,
+                                );
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                ],
+              ),
+            if (!cubit.keyExists() && state.entries.isNotEmpty)
+              OnboardingBody(
+                onContinue: cubit.setKeyAndRefresh,
+                onClose: cubit.signOut,
+              ),
+            if (state.isLoading)
+              ColoredBox(
+                key: const ValueKey('loading'),
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: const Center(
+                  child: CircularProgressIndicator(),
                 ),
-                if (state.showSearchBar)
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Spacers.hPagePadding,
-                      vertical: 25,
-                    ),
-                    sliver: SliverToBoxAdapter(
-                      key: const Key('search_bar'),
-                      child: TextField(
-                        autofocus: true,
-                        onChanged: cubit.searchEntries,
-                        cursorColor: Theme.of(context).iconTheme.color,
-                        decoration: InputDecoration(
-                          hintText: l10n.search,
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Theme.of(context).iconTheme.color,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                if (state.isLocked)
-                  SliverPadding(
-                    padding: EdgeInsets.only(
-                      top: state.showSearchBar ? 0 : 30,
-                      bottom: state.showSearchBar ? 30 : 0,
-                    ),
-                    sliver: SliverToBoxAdapter(
-                      child: Container(
-                        alignment: Alignment.center,
-                        color: Theme.of(context).iconTheme.color,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                CupertinoIcons.pencil,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                l10n.editorLocked,
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500,
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                if (state.category == HomeCategory.entries)
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Spacers.hPagePadding,
-                    ).copyWith(bottom: 150, top: state.showSearchBar ? 0 : 40),
-                    sliver: MultiSliver(
-                      children: entriesByMonth.entries.map((entry) {
-                        return HomeSection(
-                          title: entry.key,
-                          entries: entry.value,
-                          onEntryTileTap: (Entry entry) {
-                            _titleController.text = entry.title;
-                            _editorController.text = entry.body;
-                            _toggleEditor(cubit, () {
-                              cubit.updateEntry(
-                                entry,
-                                _titleController.text,
-                                _editorController.text,
-                              );
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
-              ],
-            ),
+              ),
             AnimatedPositioned(
               bottom: 0,
               left: 50,
@@ -182,7 +170,7 @@ class _HomeBodyState extends State<HomeBody> {
               curve: Curves.bounceInOut,
               top: MediaQuery.of(context).size.height * 0.85 - _scrollOffset,
               duration: const Duration(milliseconds: 200),
-              child: !state.isLoading
+              child: !state.isLoading && cubit.keyExists()
                   ? HomeIsland(
                       onAddPressed: () {
                         _toggleEditor(cubit, () {

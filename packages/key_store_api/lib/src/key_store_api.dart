@@ -20,4 +20,10 @@ abstract class KeyStoreApi {
 
   /// Set the value for a given key
   void set(String key, String value);
+
+  /// generate a random key
+  String generate(String key);
+
+  /// delete a key
+  void delete(String key);
 }

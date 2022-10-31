@@ -65,6 +65,9 @@ void main() {
         ),
         when(keyStoreRepository.initialize).thenAnswer((_) async => true),
         when(() => keyStoreRepository.get(any())).thenAnswer((_) => '1234'),
+        when(() => keyStoreRepository.set(any(), any()))
+            .thenAnswer((_) async {}),
+        when(userRepository.signOut).thenAnswer((_) async {}),
       },
     );
 
@@ -171,6 +174,19 @@ void main() {
 
       expect(cubit.state.entries, isA<List<Entry>>());
       expect(cubit.state.entries, isNotEmpty);
+    });
+
+    test('setKey', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      HomeCubit(repository, userRepository, keyStoreRepository)
+          .setKeyAndRefresh('1234');
+    });
+
+    test('signOut', () async {
+      final api = SingleStoreApi(dio: dio);
+      final repository = JournalRepository(api);
+      HomeCubit(repository, userRepository, keyStoreRepository).signOut();
     });
   });
 }

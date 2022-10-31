@@ -10,6 +10,8 @@ dependencies:
   hive_flutter: ^1.1.0
   key_store_api:
     path: ../key_store_api
+  uuid: ^3.0.6
+
 
 
 dev_dependencies:

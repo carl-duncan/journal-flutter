@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -23,6 +24,14 @@ class HomeCubit extends Cubit<HomeState> {
 
   String? get encryptionKey =>
       state.isLocked ? null : _keyStoreRepository.get(_encryptionKey);
+
+  bool keyExists() {
+    try {
+      return _keyStoreRepository.get(_encryptionKey) != null;
+    } catch (e) {
+      return false;
+    }
+  }
 
   Future<void> getEntries() async {
     final userId = await _userRepository.getUserId();
@@ -127,6 +136,13 @@ class HomeCubit extends Cubit<HomeState> {
     return state.entries;
   }
 
+  void setKeyAndRefresh(String key) {
+    isLoading(isLoading: true);
+    log('setKeyAndRefresh $key');
+    _keyStoreRepository.set(_encryptionKey, key);
+    getEntries();
+  }
+
   final JournalRepository _repository;
 
   final UserRepository _userRepository;
@@ -153,5 +169,9 @@ class HomeCubit extends Cubit<HomeState> {
     await _repository.updateEntry(updatedEntry, key: encryptionKey!);
 
     await getEntries();
+  }
+
+  void signOut() {
+    _userRepository.signOut();
   }
 }
