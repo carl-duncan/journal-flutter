@@ -10,7 +10,9 @@ class EditorModal extends StatelessWidget {
     required this.bodyController,
     required this.onClose,
     required this.titleController,
-    required this.isVisualizeVisible,
+    required this.isEditRowVisible,
+    required this.onDelete,
+    required this.onVisualize,
   });
 
   final TextEditingController bodyController;
@@ -21,7 +23,11 @@ class EditorModal extends StatelessWidget {
 
   final VoidCallback onClose;
 
-  final bool isVisualizeVisible;
+  final VoidCallback? onDelete;
+
+  final VoidCallback? onVisualize;
+
+  final bool isEditRowVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -75,43 +81,6 @@ class EditorModal extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              if (isVisualizeVisible)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    width: size.width,
-                    alignment: Alignment.center,
-                    color: Theme.of(context).iconTheme.color,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            CupertinoIcons.wand_stars,
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            l10n.visualizeYourEntry,
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              const SizedBox(
-                height: 15,
-              ),
               IntrinsicHeight(
                 child: Row(
                   children: [
@@ -120,6 +89,7 @@ class EditorModal extends StatelessWidget {
                         key: const Key('editor_modal_title_field'),
                         autofocus: true,
                         controller: titleController,
+                        textInputAction: TextInputAction.done,
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               fontSize: 24,
                             ),
@@ -152,6 +122,7 @@ class EditorModal extends StatelessWidget {
                   key: const Key('editor_modal_text_field'),
                   controller: bodyController,
                   autofocus: true,
+                  textInputAction: TextInputAction.done,
                   cursorColor: Theme.of(context).iconTheme.color,
                   style: const TextStyle(
                     fontSize: 20,
@@ -174,6 +145,31 @@ class EditorModal extends StatelessWidget {
                   maxLength: 150,
                 ),
               ),
+              if (isEditRowVisible)
+                Row(
+                  children: [
+                    InkWell(
+                      key: const Key('editor_modal_visualize_button'),
+                      onTap: onVisualize,
+                      child: const Icon(
+                        CupertinoIcons.wand_stars,
+                        size: 40,
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.05,
+                    ),
+                    InkWell(
+                      key: const Key('editor_modal_delete_button'),
+                      onTap: onDelete,
+                      child: const Icon(
+                        Icons.delete,
+                        size: 40,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

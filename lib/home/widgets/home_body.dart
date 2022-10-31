@@ -136,13 +136,19 @@ class _HomeBodyState extends State<HomeBody> {
                             onEntryTileTap: (Entry entry) {
                               _titleController.text = entry.title;
                               _editorController.text = entry.body;
-                              _toggleEditor(cubit, () {
-                                cubit.updateEntry(
-                                  entry,
-                                  _titleController.text,
-                                  _editorController.text,
-                                );
-                              });
+                              _toggleEditor(
+                                cubit,
+                                () {
+                                  cubit.updateEntry(
+                                    entry,
+                                    _titleController.text,
+                                    _editorController.text,
+                                  );
+                                },
+                                onDelete: () {
+                                  cubit.deleteEntry(entry);
+                                },
+                              );
                             },
                           );
                         }).toList(),
@@ -199,7 +205,12 @@ class _HomeBodyState extends State<HomeBody> {
     );
   }
 
-  void _toggleEditor(HomeCubit cubit, VoidCallback onSave) {
+  void _toggleEditor(
+    HomeCubit cubit,
+    VoidCallback onSave, {
+    VoidCallback? onDelete,
+    VoidCallback? onVisualize,
+  }) {
     showBarModalBottomSheet<EditorModal>(
       useRootNavigator: true,
       isDismissible: false,
@@ -214,8 +225,13 @@ class _HomeBodyState extends State<HomeBody> {
         onClose: () => Navigator.pop(context),
         bodyController: _editorController,
         titleController: _titleController,
-        isVisualizeVisible: _editorController.text.isNotEmpty &&
+        isEditRowVisible: _editorController.text.isNotEmpty &&
             _titleController.text.isNotEmpty,
+        onDelete: () {
+          Navigator.pop(context);
+          onDelete?.call();
+        },
+        onVisualize: onVisualize,
       ),
     ).then(
       (value) => {

@@ -229,6 +229,53 @@ void main() {
         HomeCubit(repository, userRepository, keyStoreRepository, localizations)
             .signOut();
       });
+
+      test('deleteEntry', () async {
+        final api = SingleStoreApi(dio: dio);
+        final repository = JournalRepository(api);
+        final cubit = HomeCubit(
+          repository,
+          userRepository,
+          keyStoreRepository,
+          localizations,
+        );
+
+        await cubit.toggleLock();
+
+        cubit.deleteEntry(
+          Entry(
+            id: 0,
+            title: 'Test Title',
+            body: 'Body',
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+            userId: '1234',
+          ),
+        );
+
+        expect(cubit.state.entries, isA<List<Entry>>());
+        expect(cubit.state.entries, isNotEmpty);
+      });
+
+      test('deleteEntry Failed', () async {
+        final api = SingleStoreApi(dio: dio);
+        final repository = JournalRepository(api);
+        HomeCubit(
+          repository,
+          userRepository,
+          keyStoreRepository,
+          localizations,
+        ).deleteEntry(
+          Entry(
+            id: 0,
+            title: 'Test Title',
+            body: 'Body',
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+            userId: '1234',
+          ),
+        );
+      });
     });
 
     group('New User', () {

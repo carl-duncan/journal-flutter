@@ -216,6 +216,12 @@ void main() {
 
       await tester.tap(find.byKey(const Key('editor_modal_save_button')));
       await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(HomeEntryTile).first);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.delete));
+      await tester.pumpAndSettle();
     });
 
     testWidgets('press homeCategorySelector', (tester) async {
