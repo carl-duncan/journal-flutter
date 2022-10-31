@@ -200,4 +200,16 @@ class HomeCubit extends Cubit<HomeState> {
     _keyStoreRepository.delete(_encryptionKey);
     _userRepository.signOut();
   }
+
+  void deleteEntry(Entry entry) {
+    isLoading(isLoading: true);
+
+    if (encryptionKey == null) {
+      isLoading(isLoading: false);
+      return;
+    }
+
+    _repository.deleteEntry(entry);
+    getEntries();
+  }
 }

@@ -63,8 +63,20 @@ class SingleStoreApi extends JournalApi {
   }
 
   @override
-  Future<void> deleteEntry(Entry entry) {
-    throw UnimplementedError();
+  Future<void> deleteEntry(Entry entry) async {
+    final data = {
+      'sql': 'delete from entries where id = ?',
+      'args': [entry.id],
+      'database': database,
+    };
+
+    await dio.post<Map<String, dynamic>>(
+      '${baseUrl}exec',
+      data: data,
+      options: options,
+    );
+
+    return;
   }
 
   @override

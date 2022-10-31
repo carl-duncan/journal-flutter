@@ -39,4 +39,9 @@ class JournalRepository {
   Future<void> updateEntry(Entry entry, {required String key}) async {
     return _api.updateEntry(entry, key: key);
   }
+
+  /// A description for deleteEntry
+  Future<void> deleteEntry(Entry entry) async {
+    return _api.deleteEntry(entry);
+  }
 }
