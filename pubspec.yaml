@@ -13,6 +13,7 @@ dependencies:
   amplify_authenticator: ^0.2.3
   amplify_flutter: ^0.6.0
   bloc: ^8.1.0
+  cupertino_icons: ^1.0.3
   dio: ^4.0.6
   equatable: ^2.0.5
   flutter:
@@ -21,11 +22,17 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   google_fonts: ^3.0.1
+  hive_api:
+    path: packages/hive_api
   intl: ^0.17.0
   journal_api:
     path: packages/journal_api
   journal_repository:
     path: packages/journal_repository
+  key_store_api:
+    path: packages/key_store_api
+  key_store_repository:
+    path: packages/key_store_repository
   modal_bottom_sheet: ^2.1.2
   single_store_api:
       path: packages/single_store_api

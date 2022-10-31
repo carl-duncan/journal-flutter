@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:journal/settings/cubit/cubit.dart';
 import 'package:journal/settings/widgets/settings_body.dart';
 import 'package:journal_repository/journal_repository.dart';
+import 'package:key_store_repository/key_store_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
 /// {@template settings_page}
@@ -22,6 +23,7 @@ class SettingsPage extends StatelessWidget {
       create: (context) => SettingsCubit(
         context.read<JournalRepository>(),
         context.read<UserRepository>(),
+        context.read<KeyStoreRepository>(),
       ),
       child: const Scaffold(
         body: SettingsView(),

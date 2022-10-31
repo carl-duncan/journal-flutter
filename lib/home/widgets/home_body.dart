@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:journal/home/home.dart';
 import 'package:journal/home/widgets/editor_modal.dart';
+import 'package:journal/home/widgets/locked_banner.dart';
+import 'package:journal/home/widgets/onboarding_body.dart';
 import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/spacers.dart';
 import 'package:journal/res/utils/transition.dart' show createRoute;
@@ -60,104 +62,136 @@ class _HomeBodyState extends State<HomeBody> {
     final l10n = context.l10n;
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        final entriesByMonth = _getEntriesByMonth(state.entries);
+        final entriesByMonth = state.showSearchBar
+            ? _getEntriesByMonth(state.searchEntries)
+            : _getEntriesByMonth(state.entries);
         return Stack(
           children: [
-            CustomScrollBody(
-              controller: _scrollController,
-              isLoading: state.isLoading,
-              slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                    top: 60,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: HomeCategorySelector(
-                      category: state.category,
-                      onEntriesPressed: () => cubit.toggleCategory(
-                        HomeCategory.entries,
-                      ),
-                      onGalleryPressed: () => cubit.toggleCategory(
-                        HomeCategory.gallery,
+            if (cubit.keyExists())
+              CustomScrollBody(
+                controller: _scrollController,
+                isLoading: state.isLoading,
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                      top: 60,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: HomeCategorySelector(
+                        category: state.category,
+                        onEntriesPressed: () => cubit.toggleCategory(
+                          HomeCategory.entries,
+                        ),
+                        onGalleryPressed: () => cubit.toggleCategory(
+                          HomeCategory.gallery,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Spacers.hPagePadding,
-                    vertical: 25,
-                  ),
-                  sliver: state.showSearchBar
-                      ? SliverToBoxAdapter(
-                          key: const Key('search_bar'),
-                          child: TextField(
-                            autofocus: true,
-                            onChanged: cubit.searchEntries,
-                            cursorColor: Theme.of(context).iconTheme.color,
-                            decoration: InputDecoration(
-                              hintText: l10n.search,
-                              prefixIcon: Icon(
-                                Icons.search,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
+                  if (state.showSearchBar)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Spacers.hPagePadding,
+                        vertical: 25,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        key: const Key('search_bar'),
+                        child: TextField(
+                          autofocus: true,
+                          onChanged: cubit.searchEntries,
+                          cursorColor: Theme.of(context).iconTheme.color,
+                          decoration: InputDecoration(
+                            hintText: l10n.search,
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: Theme.of(context).iconTheme.color,
                             ),
                           ),
-                        )
-                      : const SliverToBoxAdapter(
-                          key: Key('no_search_bar'),
-                          child: SizedBox.shrink(),
                         ),
+                      ),
+                    ),
+                  if (state.isLocked)
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        top: state.showSearchBar ? 0 : 30,
+                        bottom: state.showSearchBar ? 30 : 0,
+                      ),
+                      sliver: const SliverToBoxAdapter(
+                        child: LockedBanner(),
+                      ),
+                    ),
+                  if (state.category == HomeCategory.entries)
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Spacers.hPagePadding,
+                      ).copyWith(
+                        bottom: 150,
+                        top: state.showSearchBar ? 0 : 40,
+                      ),
+                      sliver: MultiSliver(
+                        children: entriesByMonth.entries.map((entry) {
+                          return HomeSection(
+                            title: entry.key,
+                            entries: entry.value,
+                            onEntryTileTap: (Entry entry) {
+                              _titleController.text = entry.title;
+                              _editorController.text = entry.body;
+                              _toggleEditor(cubit, () {
+                                cubit.updateEntry(
+                                  entry,
+                                  _titleController.text,
+                                  _editorController.text,
+                                );
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                ],
+              ),
+            if (!cubit.keyExists() && state.entries.isNotEmpty)
+              OnboardingBody(
+                onContinue: cubit.setKeyAndRefresh,
+                onClose: cubit.signOut,
+              ),
+            if (state.isLoading)
+              ColoredBox(
+                key: const ValueKey('loading'),
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: const Center(
+                  child: CircularProgressIndicator(),
                 ),
-                if (state.category == HomeCategory.entries)
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Spacers.hPagePadding,
-                    ),
-                    sliver: MultiSliver(
-                      children: entriesByMonth.entries.map((entry) {
-                        return HomeSection(
-                          title: entry.key,
-                          entries: entry.value,
-                          onEntryTileTap: (Entry entry) {
-                            _titleController.text = entry.title;
-                            _editorController.text = entry.body;
-                            _toggleEditor(cubit, () {
-                              cubit.updateEntry(
-                                entry,
-                                _titleController.text,
-                                _editorController.text,
-                              );
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
-              ],
-            ),
+              ),
             AnimatedPositioned(
               bottom: 0,
-              left: 100,
-              right: 100,
+              left: 50,
+              right: 50,
               curve: Curves.bounceInOut,
               top: MediaQuery.of(context).size.height * 0.85 - _scrollOffset,
               duration: const Duration(milliseconds: 200),
-              child: HomeIsland(
-                onAddPressed: () {
-                  _toggleEditor(cubit, () {
-                    cubit.createEntry(
-                      _titleController.text,
-                      _editorController.text,
-                    );
-                  });
-                },
-                onSearchPressed: cubit.toggleSearchBar,
-                onSettingsPressed: () {
-                  Navigator.push(context, createRoute(const SettingsPage()));
-                },
-                isSearchBarVisible: state.showSearchBar,
-              ),
+              child: !state.isLoading && cubit.keyExists()
+                  ? HomeIsland(
+                      onAddPressed: () {
+                        _toggleEditor(cubit, () {
+                          cubit.createEntry(
+                            _titleController.text,
+                            _editorController.text,
+                          );
+                        });
+                      },
+                      onSearchPressed: cubit.toggleSearchBar,
+                      onSettingsPressed: () {
+                        Navigator.push(
+                          context,
+                          createRoute(const SettingsPage()),
+                        );
+                      },
+                      isSearchBarVisible: state.showSearchBar,
+                      onLockPressed: cubit.toggleLock,
+                      isLocked: state.isLocked,
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         );
@@ -177,14 +211,19 @@ class _HomeBodyState extends State<HomeBody> {
           Navigator.pop(context);
           onSave();
         },
-        onClose: () {
-          Navigator.pop(context);
-          _editorController.clear();
-          _titleController.clear();
-        },
+        onClose: () => Navigator.pop(context),
         bodyController: _editorController,
         titleController: _titleController,
+        isVisualizeVisible: _editorController.text.isNotEmpty &&
+            _titleController.text.isNotEmpty,
       ),
+    ).then(
+      (value) => {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          _editorController.clear();
+          _titleController.clear();
+        })
+      },
     );
   }
 

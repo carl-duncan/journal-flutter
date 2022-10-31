@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/home.dart';
 import 'package:journal_repository/journal_repository.dart';
+import 'package:key_store_repository/key_store_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:single_store_api/single_store_api.dart';
 import 'package:user_repository/user_repository.dart';
@@ -13,9 +14,12 @@ class MockDio extends Mock implements Dio {}
 
 class MockUserRepository extends Mock implements UserRepository {}
 
+class MockKeyStoreRepository extends Mock implements KeyStoreRepository {}
+
 void main() {
   final dio = MockDio();
   final userRepository = MockUserRepository();
+  final keyStoreRepository = MockKeyStoreRepository();
 
   setUpAll(
     () => {
@@ -57,11 +61,8 @@ void main() {
           },
         ),
       ),
-      when(
-        userRepository.getEncryptionKey,
-      ).thenAnswer(
-        (_) async => '1234',
-      ),
+      when(keyStoreRepository.initialize).thenAnswer((_) async => true),
+      when(() => keyStoreRepository.get(any())).thenAnswer((_) => '1234'),
     },
   );
 
@@ -76,6 +77,9 @@ void main() {
           ),
           RepositoryProvider<UserRepository>(
             create: (_) => userRepository,
+          ),
+          RepositoryProvider<KeyStoreRepository>(
+            create: (_) => keyStoreRepository,
           ),
         ],
         child: const HomePage(),

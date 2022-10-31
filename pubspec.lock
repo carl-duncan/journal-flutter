@@ -204,6 +204,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
+  cupertino_icons:
+    dependency: "direct main"
+    description:
+      name: cupertino_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.5"
   dart_style:
     dependency: transitive
     description:
@@ -296,6 +303,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  hive:
+    dependency: transitive
+    description:
+      name: hive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.3"
+  hive_api:
+    dependency: "direct main"
+    description:
+      path: "packages/hive_api"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  hive_flutter:
+    dependency: transitive
+    description:
+      name: hive_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   http:
     dependency: transitive
     description:
@@ -366,6 +394,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.5.2"
+  key_store_api:
+    dependency: "direct main"
+    description:
+      path: "packages/key_store_api"
+      relative: true
+    source: path
+    version: "0.1.0+1"
+  key_store_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/key_store_repository"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   logging:
     dependency: transitive
     description:

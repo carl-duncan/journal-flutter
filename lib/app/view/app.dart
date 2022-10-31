@@ -9,10 +9,16 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive_api/hive_api.dart';
 import 'package:journal/home/home.dart';
 import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/app_themes.dart';
+import 'package:journal/resolvers/localized_button_resolver.dart';
+import 'package:journal/resolvers/localized_country_resolver.dart';
+import 'package:journal/resolvers/localized_input_resolver.dart';
+import 'package:journal/resolvers/localized_title_resolver.dart';
 import 'package:journal_repository/journal_repository.dart';
+import 'package:key_store_repository/key_store_repository.dart';
 import 'package:single_store_api/single_store_api.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -21,11 +27,22 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const stringResolver = AuthStringResolver(
+      buttons: LocalizedButtonResolver(),
+      countries: LocalizedCountryResolver(),
+      titles: LocalizedTitleResolver(),
+      inputs: LocalizedInputResolver(),
+    );
+
     return Authenticator(
+      stringResolver: stringResolver,
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider(
             create: (context) => JournalRepository(SingleStoreApi(dio: Dio())),
+          ),
+          RepositoryProvider(
+            create: (context) => const KeyStoreRepository(HiveApi('journal')),
           ),
           RepositoryProvider(create: (context) => const UserRepository()),
         ],
