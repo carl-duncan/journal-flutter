@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:journal/home/cubit/cubit.dart';
 import 'package:journal/home/widgets/home_body.dart';
+import 'package:journal/l10n/l10n.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:key_store_repository/key_store_repository.dart';
 import 'package:user_repository/user_repository.dart';
@@ -20,11 +21,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocProvider(
       create: (context) => HomeCubit(
         context.read<JournalRepository>(),
         context.read<UserRepository>(),
         context.read<KeyStoreRepository>(),
+        l10n,
       ),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: Theme.of(context).brightness == Brightness.dark

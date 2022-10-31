@@ -26,10 +26,13 @@ class MockUserRepository extends Mock implements UserRepository {}
 
 class HiveApiMock extends Mock implements HiveApi {}
 
+class MockAppLocalizations extends Mock implements AppLocalizations {}
+
 void main() {
   final dio = MockDio();
   final userRepository = MockUserRepository();
   final hiveApi = HiveApiMock();
+  final localizations = MockAppLocalizations();
 
   group('Success', () {
     setUpAll(
@@ -88,6 +91,7 @@ void main() {
             KeyStoreRepository(
               hiveApi,
             ),
+            localizations,
           ),
           child: const HomeBody(),
         ),
@@ -112,6 +116,7 @@ void main() {
               KeyStoreRepository(
                 hiveApi,
               ),
+              localizations,
             ),
             child: const HomeBody(),
           ),
@@ -143,6 +148,7 @@ void main() {
               KeyStoreRepository(
                 hiveApi,
               ),
+              localizations,
             ),
             child: const HomeBody(),
           ),
@@ -172,6 +178,7 @@ void main() {
               KeyStoreRepository(
                 hiveApi,
               ),
+              localizations,
             ),
             child: const HomeBody(),
           ),
@@ -227,6 +234,7 @@ void main() {
                 KeyStoreRepository(
                   hiveApi,
                 ),
+                localizations,
               ),
               child: const HomeBody(),
             ),
@@ -259,6 +267,7 @@ void main() {
               KeyStoreRepository(
                 hiveApi,
               ),
+              localizations,
             ),
             child: const HomeBody(),
           ),
@@ -309,6 +318,7 @@ void main() {
                 context.read<JournalRepository>(),
                 context.read<UserRepository>(),
                 context.read<KeyStoreRepository>(),
+                localizations,
               ),
               child: const HomeBody(),
             ),
@@ -357,6 +367,7 @@ void main() {
                 context.read<JournalRepository>(),
                 context.read<UserRepository>(),
                 context.read<KeyStoreRepository>(),
+                localizations,
               ),
               child: const HomeBody(),
             ),
@@ -428,6 +439,7 @@ void main() {
             KeyStoreRepository(
               hiveApi,
             ),
+            localizations,
           ),
           child: const HomeBody(),
         ),

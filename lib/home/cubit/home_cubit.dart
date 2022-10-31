@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:journal/home/widgets/home_category_selector.dart';
+import 'package:journal/l10n/l10n.dart';
 import 'package:journal_api/journal_api.dart';
 import 'package:journal_repository/journal_repository.dart';
 import 'package:key_store_repository/key_store_repository.dart';
@@ -12,13 +13,18 @@ import 'package:user_repository/user_repository.dart';
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this._repository, this._userRepository, this._keyStoreRepository)
-      : super(const HomeInitial()) {
+  HomeCubit(
+    this._repository,
+    this._userRepository,
+    this._keyStoreRepository,
+    this._localizations,
+  ) : super(const HomeInitial()) {
     init();
   }
 
   Future<void> init() async {
     await _keyStoreRepository.initialize();
+    await setUpNewUser();
     await getEntries();
   }
 
@@ -30,6 +36,23 @@ class HomeCubit extends Cubit<HomeState> {
       return _keyStoreRepository.get(_encryptionKey) != null;
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<void> setUpNewUser() async {
+    final doesKeyExist = keyExists();
+    final userId = await _userRepository.getUserId();
+    final entries = await _repository.getEntries(userId);
+    if (!doesKeyExist && entries.isEmpty) {
+      final key = await _keyStoreRepository.generate(_encryptionKey);
+      await _repository.createEntry(
+        Entry(
+          title: _localizations.thankYouForTheSupport,
+          body: _localizations.thankYouForTheSupportDescription,
+          userId: userId,
+        ),
+        key: key,
+      );
     }
   }
 
@@ -149,6 +172,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   final KeyStoreRepository _keyStoreRepository;
 
+  final AppLocalizations _localizations;
+
   final String _encryptionKey = 'encryption_key';
 
   Future<void> updateEntry(Entry entry, String title, String body) async {
@@ -172,6 +197,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void signOut() {
+    _keyStoreRepository.delete(_encryptionKey);
     _userRepository.signOut();
   }
 }

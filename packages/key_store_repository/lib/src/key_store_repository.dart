@@ -35,4 +35,9 @@ class KeyStoreRepository {
   void delete(String key) {
     return _api.delete(key);
   }
+
+  /// A description for generate
+  Future<String> generate(String key) async {
+    return _api.generate(key);
+  }
 }

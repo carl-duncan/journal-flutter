@@ -31,5 +31,7 @@
     "email": "Email",
     "confirmPassword": "Confirm Password",
     "customAuthChallenge": "Custom Auth Challenge",
-    "editorLocked": "Editing is disabled"
+    "editorLocked": "Editing is disabled",
+    "thankYouForTheSupport": "Thank you for the support! ❤",
+    "thankYouForTheSupportDescription": "Your support helps us continue to improve the app and add new features."
 }

@@ -30,5 +30,7 @@
     "password": "Contraseña",
     "email": "Correo electrónico",
     "confirmPassword": "Confirmar contraseña",
-    "editorLocked": "La edición está deshabilitada"
+    "editorLocked": "La edición está deshabilitada",
+    "thankYouForTheSupport": "Gracias por el apoyo! ❤",
+    "thankYouForTheSupportDescription": "¡Su apoyo nos ayuda a continuar mejorando la aplicación y agregar nuevas funciones!"
 }
