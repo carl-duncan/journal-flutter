@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:journal/l10n/l10n.dart';
@@ -12,7 +11,6 @@ class EditorModal extends StatelessWidget {
     required this.titleController,
     required this.isEditRowVisible,
     required this.onDelete,
-    required this.onVisualize,
   });
 
   final TextEditingController bodyController;
@@ -24,8 +22,6 @@ class EditorModal extends StatelessWidget {
   final VoidCallback onClose;
 
   final VoidCallback? onDelete;
-
-  final VoidCallback? onVisualize;
 
   final bool isEditRowVisible;
 
@@ -116,60 +112,50 @@ class EditorModal extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              SizedBox(
-                height: size.height * 0.5,
-                child: TextField(
-                  key: const Key('editor_modal_text_field'),
-                  controller: bodyController,
-                  autofocus: true,
-                  textInputAction: TextInputAction.done,
-                  cursorColor: Theme.of(context).iconTheme.color,
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: l10n.enterYourTextHere,
-                    hintStyle: const TextStyle(
-                      fontSize: 20,
+              Stack(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.5,
+                    child: TextField(
+                      key: const Key('editor_modal_text_field'),
+                      controller: bodyController,
+                      autofocus: true,
+                      textInputAction: TextInputAction.done,
+                      cursorColor: Theme.of(context).iconTheme.color,
+                      style: const TextStyle(
+                        fontSize: 20,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: l10n.enterYourTextHere,
+                        hintStyle: const TextStyle(
+                          fontSize: 20,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.zero,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        filled: false,
+                      ),
+                      maxLines: 1000,
+                      maxLength: 150,
                     ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.zero,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    // remove background color
-                    filled: false,
                   ),
-                  maxLines: 1000,
-                  maxLength: 150,
-                ),
+                  if (isEditRowVisible)
+                    Positioned(
+                      bottom: 0,
+                      child: InkWell(
+                        key: const Key('editor_modal_delete_button'),
+                        onTap: onDelete,
+                        child: const Icon(
+                          Icons.remove_circle,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                ],
               ),
-              if (isEditRowVisible)
-                Row(
-                  children: [
-                    InkWell(
-                      key: const Key('editor_modal_visualize_button'),
-                      onTap: onVisualize,
-                      child: const Icon(
-                        CupertinoIcons.wand_stars,
-                        size: 40,
-                      ),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.05,
-                    ),
-                    InkWell(
-                      key: const Key('editor_modal_delete_button'),
-                      onTap: onDelete,
-                      child: const Icon(
-                        Icons.delete,
-                        size: 40,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
             ],
           ),
         ),

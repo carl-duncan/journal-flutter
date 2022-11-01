@@ -232,7 +232,7 @@ void main() {
       await tester.tap(find.byType(HomeEntryTile).first);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.delete));
+      await tester.tap(find.byIcon(Icons.remove_circle));
       await tester.pumpAndSettle();
     });
 

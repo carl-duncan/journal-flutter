@@ -18,14 +18,13 @@ void main() {
           titleController: titleController,
           isEditRowVisible: true,
           onDelete: () {},
-          onVisualize: () {},
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
       expect(find.byType(TextField).first, findsOneWidget);
       expect(find.byType(TextField).last, findsOneWidget);
-      expect(find.byType(Icon), findsNWidgets(4));
-      expect(find.byType(GestureDetector), findsNWidgets(4));
+      expect(find.byType(Icon), findsNWidgets(3));
+      expect(find.byType(GestureDetector), findsNWidgets(3));
     });
 
     testWidgets('EditorModal - close', (tester) async {
@@ -37,7 +36,6 @@ void main() {
           onClose: () {},
           isEditRowVisible: true,
           onDelete: () {},
-          onVisualize: () {},
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
@@ -54,7 +52,6 @@ void main() {
           onClose: () {},
           isEditRowVisible: false,
           onDelete: () {},
-          onVisualize: () {},
         ),
       );
       expect(find.byType(EditorModal), findsOneWidget);
