@@ -206,7 +206,6 @@ class _HomeBodyState extends State<HomeBody> {
     HomeCubit cubit,
     VoidCallback onSave, {
     VoidCallback? onDelete,
-    VoidCallback? onVisualize,
   }) {
     showBarModalBottomSheet<EditorModal>(
       useRootNavigator: true,
@@ -228,7 +227,6 @@ class _HomeBodyState extends State<HomeBody> {
           Navigator.pop(context);
           onDelete?.call();
         },
-        onVisualize: onVisualize,
       ),
     ).then(
       (value) => {
