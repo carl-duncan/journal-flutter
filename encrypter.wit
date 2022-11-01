@@ -1,0 +1,2 @@
+decodestr: func(message: string, key:string) -> string
+encodestr: func(message: string, key:string) -> string
