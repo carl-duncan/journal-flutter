@@ -42,24 +42,6 @@ class HomeCategorySelector extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 5),
-        const Text(
-          '|',
-        ),
-        const SizedBox(width: 5),
-        GestureDetector(
-          onTap: onGalleryPressed,
-          child: ColoredBox(
-            key: const Key('homeCategorySelector_gallery'),
-            color: Colors.transparent,
-            child: Text(
-              l10n.gallery,
-              style: category == HomeCategory.gallery
-                  ? selectedTextStyle
-                  : unselectedTextStyle,
-            ),
-          ),
-        ),
       ],
     );
   }

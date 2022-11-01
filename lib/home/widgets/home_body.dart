@@ -113,7 +113,7 @@ class _HomeBodyState extends State<HomeBody> {
                   if (state.isLocked)
                     SliverPadding(
                       padding: EdgeInsets.only(
-                        top: state.showSearchBar ? 0 : 30,
+                        top: state.showSearchBar ? 0 : 10,
                         bottom: state.showSearchBar ? 30 : 0,
                       ),
                       sliver: const SliverToBoxAdapter(
@@ -126,7 +126,7 @@ class _HomeBodyState extends State<HomeBody> {
                         horizontal: Spacers.hPagePadding,
                       ).copyWith(
                         bottom: 150,
-                        top: state.showSearchBar ? 0 : 40,
+                        top: state.showSearchBar ? 0 : 20,
                       ),
                       sliver: MultiSliver(
                         children: entriesByMonth.entries.map((entry) {
