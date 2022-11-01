@@ -15,8 +15,8 @@ void main() {
           onGalleryPressed: () {},
         ),
       );
-      expect(find.byType(Text), findsNWidgets(3));
-      expect(find.byType(GestureDetector), findsNWidgets(2));
+      expect(find.byType(Text), findsNWidgets(1));
+      expect(find.byType(GestureDetector), findsNWidgets(1));
     });
   });
 }

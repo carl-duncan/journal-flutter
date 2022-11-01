@@ -249,9 +249,6 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(const Key('homeCategorySelector_gallery')));
-      await tester.pumpAndSettle();
-
       await tester.tap(find.byKey(const Key('homeCategorySelector_entries')));
       await tester.pumpAndSettle();
     });
