@@ -16,11 +16,11 @@ class HomeCategorySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     const selectedTextStyle = TextStyle(
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: FontWeight.bold,
     );
     const unselectedTextStyle = TextStyle(
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: FontWeight.w100,
       color: Colors.grey,
     );
