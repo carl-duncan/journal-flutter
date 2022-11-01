@@ -12,7 +12,6 @@ void main() {
         HomeCategorySelector(
           category: HomeCategory.gallery,
           onEntriesPressed: () {},
-          onGalleryPressed: () {},
         ),
       );
       expect(find.byType(Text), findsNWidgets(1));

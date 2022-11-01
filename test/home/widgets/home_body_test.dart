@@ -1,3 +1,4 @@
+import 'package:authentication_helper/authentication_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,11 +29,14 @@ class HiveApiMock extends Mock implements HiveApi {}
 
 class MockAppLocalizations extends Mock implements AppLocalizations {}
 
+class MockAuthenticationHelper extends Mock implements AuthenticationHelper {}
+
 void main() {
   final dio = MockDio();
   final userRepository = MockUserRepository();
   final hiveApi = HiveApiMock();
   final localizations = MockAppLocalizations();
+  final authenticationHelper = MockAuthenticationHelper();
 
   group('Success', () {
     setUpAll(
@@ -77,6 +81,10 @@ void main() {
         ),
         when(hiveApi.initialize).thenAnswer((_) async => true),
         when(() => hiveApi.get(any())).thenAnswer((_) => '1234'),
+        when(() => localizations.unlockYourJournal)
+            .thenReturn('Unlock your journal'),
+        when(() => authenticationHelper.authenticated(any()))
+            .thenAnswer((_) async => true),
       },
     );
 
@@ -92,6 +100,7 @@ void main() {
               hiveApi,
             ),
             localizations,
+            authenticationHelper,
           ),
           child: const HomeBody(),
         ),
@@ -117,6 +126,7 @@ void main() {
                 hiveApi,
               ),
               localizations,
+              authenticationHelper,
             ),
             child: const HomeBody(),
           ),
@@ -149,6 +159,7 @@ void main() {
                 hiveApi,
               ),
               localizations,
+              authenticationHelper,
             ),
             child: const HomeBody(),
           ),
@@ -179,6 +190,7 @@ void main() {
                 hiveApi,
               ),
               localizations,
+              authenticationHelper,
             ),
             child: const HomeBody(),
           ),
@@ -241,6 +253,7 @@ void main() {
                   hiveApi,
                 ),
                 localizations,
+                authenticationHelper,
               ),
               child: const HomeBody(),
             ),
@@ -271,6 +284,7 @@ void main() {
                 hiveApi,
               ),
               localizations,
+              authenticationHelper,
             ),
             child: const HomeBody(),
           ),
@@ -322,6 +336,7 @@ void main() {
                 context.read<UserRepository>(),
                 context.read<KeyStoreRepository>(),
                 localizations,
+                authenticationHelper,
               ),
               child: const HomeBody(),
             ),
@@ -371,6 +386,7 @@ void main() {
                 context.read<UserRepository>(),
                 context.read<KeyStoreRepository>(),
                 localizations,
+                authenticationHelper,
               ),
               child: const HomeBody(),
             ),
@@ -428,6 +444,10 @@ void main() {
         ),
         when(hiveApi.initialize).thenAnswer((_) async => true),
         when(() => hiveApi.get(any())).thenAnswer((_) => null),
+        when(() => localizations.unlockYourJournal)
+            .thenReturn('Unlock your journal'),
+        when(() => authenticationHelper.authenticated(any()))
+            .thenAnswer((_) async => true),
       },
     );
 
@@ -443,6 +463,7 @@ void main() {
               hiveApi,
             ),
             localizations,
+            authenticationHelper,
           ),
           child: const HomeBody(),
         ),

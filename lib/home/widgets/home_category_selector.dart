@@ -8,11 +8,9 @@ class HomeCategorySelector extends StatelessWidget {
     super.key,
     required this.category,
     required this.onEntriesPressed,
-    required this.onGalleryPressed,
   });
   final HomeCategory category;
   final VoidCallback onEntriesPressed;
-  final VoidCallback onGalleryPressed;
 
   @override
   Widget build(BuildContext context) {

@@ -82,9 +82,6 @@ class _HomeBodyState extends State<HomeBody> {
                         onEntriesPressed: () => cubit.toggleCategory(
                           HomeCategory.entries,
                         ),
-                        onGalleryPressed: () => cubit.toggleCategory(
-                          HomeCategory.gallery,
-                        ),
                       ),
                     ),
                   ),

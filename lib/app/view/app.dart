@@ -6,6 +6,7 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:authentication_helper/authentication_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -45,6 +46,9 @@ class App extends StatelessWidget {
             create: (context) => const KeyStoreRepository(HiveApi('journal')),
           ),
           RepositoryProvider(create: (context) => const UserRepository()),
+          RepositoryProvider<AuthenticationHelper>(
+            create: (context) => AuthenticationHelper(),
+          ),
         ],
         child: MaterialApp(
           theme: AppThemes.lightTheme,

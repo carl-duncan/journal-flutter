@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:authentication_helper/src/authentication_helper.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:journal/home/widgets/home_category_selector.dart';
@@ -18,6 +19,7 @@ class HomeCubit extends Cubit<HomeState> {
     this._userRepository,
     this._keyStoreRepository,
     this._localizations,
+    this._authenticationHelper,
   ) : super(const HomeInitial()) {
     init();
   }
@@ -101,6 +103,13 @@ class HomeCubit extends Cubit<HomeState> {
         key: _keyStoreRepository.get(_encryptionKey),
       );
 
+      final isAuthenticated = await _authenticationHelper
+          .authenticated(_localizations.unlockYourJournal);
+
+      if (!isAuthenticated) {
+        return;
+      }
+
       emit(
         state.copyWith(
           isLocked: false,
@@ -173,6 +182,8 @@ class HomeCubit extends Cubit<HomeState> {
   final KeyStoreRepository _keyStoreRepository;
 
   final AppLocalizations _localizations;
+
+  final AuthenticationHelper _authenticationHelper;
 
   final String _encryptionKey = 'encryption_key';
 
