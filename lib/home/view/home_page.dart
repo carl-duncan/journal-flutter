@@ -1,3 +1,4 @@
+import 'package:authentication_helper/authentication_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:journal/home/cubit/cubit.dart';
@@ -28,6 +29,7 @@ class HomePage extends StatelessWidget {
         context.read<UserRepository>(),
         context.read<KeyStoreRepository>(),
         l10n,
+        context.read<AuthenticationHelper>(),
       ),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: Theme.of(context).brightness == Brightness.dark

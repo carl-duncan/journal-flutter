@@ -1,3 +1,4 @@
+import 'package:authentication_helper/authentication_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,10 +17,13 @@ class MockUserRepository extends Mock implements UserRepository {}
 
 class MockKeyStoreRepository extends Mock implements KeyStoreRepository {}
 
+class MockAuthenticationHelper extends Mock implements AuthenticationHelper {}
+
 void main() {
   final dio = MockDio();
   final userRepository = MockUserRepository();
   final keyStoreRepository = MockKeyStoreRepository();
+  final authenticationHelper = MockAuthenticationHelper();
 
   setUpAll(
     () => {
@@ -80,6 +84,12 @@ void main() {
           ),
           RepositoryProvider<KeyStoreRepository>(
             create: (_) => keyStoreRepository,
+          ),
+          RepositoryProvider<KeyStoreRepository>(
+            create: (_) => keyStoreRepository,
+          ),
+          RepositoryProvider<AuthenticationHelper>(
+            create: (_) => authenticationHelper,
           ),
         ],
         child: const HomePage(),

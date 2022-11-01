@@ -8,21 +8,19 @@ class HomeCategorySelector extends StatelessWidget {
     super.key,
     required this.category,
     required this.onEntriesPressed,
-    required this.onGalleryPressed,
   });
   final HomeCategory category;
   final VoidCallback onEntriesPressed;
-  final VoidCallback onGalleryPressed;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     const selectedTextStyle = TextStyle(
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: FontWeight.bold,
     );
     const unselectedTextStyle = TextStyle(
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: FontWeight.w100,
       color: Colors.grey,
     );
@@ -37,24 +35,6 @@ class HomeCategorySelector extends StatelessWidget {
             child: Text(
               l10n.entries,
               style: category == HomeCategory.entries
-                  ? selectedTextStyle
-                  : unselectedTextStyle,
-            ),
-          ),
-        ),
-        const SizedBox(width: 5),
-        const Text(
-          '|',
-        ),
-        const SizedBox(width: 5),
-        GestureDetector(
-          onTap: onGalleryPressed,
-          child: ColoredBox(
-            key: const Key('homeCategorySelector_gallery'),
-            color: Colors.transparent,
-            child: Text(
-              l10n.gallery,
-              style: category == HomeCategory.gallery
                   ? selectedTextStyle
                   : unselectedTextStyle,
             ),

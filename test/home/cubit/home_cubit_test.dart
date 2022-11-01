@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:authentication_helper/authentication_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/home/cubit/cubit.dart';
@@ -20,12 +21,15 @@ class MockKeyStoreRepository extends Mock implements KeyStoreRepository {}
 
 class MockAppLocalizations extends Mock implements AppLocalizations {}
 
+class MockAuthenticationHelper extends Mock implements AuthenticationHelper {}
+
 void main() {
   group('HomeCubit', () {
     final dio = MockDio();
     final userRepository = MockUserRepository();
     final keyStoreRepository = MockKeyStoreRepository();
     final localizations = MockAppLocalizations();
+    final authenticationHelper = MockAuthenticationHelper();
 
     group('Current User', () {
       setUpAll(
@@ -73,6 +77,10 @@ void main() {
           when(() => keyStoreRepository.set(any(), any()))
               .thenAnswer((_) async {}),
           when(userRepository.signOut).thenAnswer((_) async {}),
+          when(() => localizations.unlockYourJournal)
+              .thenReturn('Unlock your journal'),
+          when(() => authenticationHelper.authenticated(any()))
+              .thenAnswer((_) async => true),
         },
       );
 
@@ -84,6 +92,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         );
 
         await cubit.getEntries();
@@ -100,6 +109,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         );
 
         expect(cubit.state.showSearchBar, isFalse);
@@ -121,6 +131,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         );
 
         expect(cubit.state.category, HomeCategory.entries);
@@ -138,6 +149,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         );
 
         expect(cubit.state.isLoading, isTrue);
@@ -155,6 +167,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         );
 
         await cubit.toggleLock();
@@ -179,6 +192,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         );
 
         await cubit.searchEntries('Test');
@@ -195,6 +209,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         );
 
         await cubit.toggleLock();
@@ -219,15 +234,25 @@ void main() {
       test('setKey', () async {
         final api = SingleStoreApi(dio: dio);
         final repository = JournalRepository(api);
-        HomeCubit(repository, userRepository, keyStoreRepository, localizations)
-            .setKeyAndRefresh('1234');
+        HomeCubit(
+          repository,
+          userRepository,
+          keyStoreRepository,
+          localizations,
+          authenticationHelper,
+        ).setKeyAndRefresh('1234');
       });
 
       test('signOut', () async {
         final api = SingleStoreApi(dio: dio);
         final repository = JournalRepository(api);
-        HomeCubit(repository, userRepository, keyStoreRepository, localizations)
-            .signOut();
+        HomeCubit(
+          repository,
+          userRepository,
+          keyStoreRepository,
+          localizations,
+          authenticationHelper,
+        ).signOut();
       });
 
       test('deleteEntry', () async {
@@ -238,6 +263,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         );
 
         await cubit.toggleLock();
@@ -265,6 +291,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         ).deleteEntry(
           Entry(
             id: 0,
@@ -311,6 +338,10 @@ void main() {
               .thenReturn('Thank you for the support!'),
           when(() => localizations.thankYouForTheSupportDescription)
               .thenReturn('Thanks'),
+          when(() => localizations.unlockYourJournal)
+              .thenReturn('Unlock your journal'),
+          when(() => authenticationHelper.authenticated(any()))
+              .thenAnswer((_) async => true),
         },
       );
 
@@ -322,6 +353,7 @@ void main() {
           userRepository,
           keyStoreRepository,
           localizations,
+          authenticationHelper,
         ).setUpNewUser();
       });
     });
