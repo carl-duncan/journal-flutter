@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:authentication_helper/src/authentication_helper.dart';
+import 'package:authentication_helper/authentication_helper.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:journal/home/widgets/home_category_selector.dart';
