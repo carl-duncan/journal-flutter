@@ -34,5 +34,14 @@
     "editorLocked": "Editing is disabled",
     "thankYouForTheSupport": "Thank you for the support! ❤",
     "thankYouForTheSupportDescription": "Your support helps us continue to improve the app and add new features.",
-    "unlockYourJournal": "Unlock your journal"
+    "unlockYourJournal": "Unlock your journal",
+    "theJournalApp" : "the journal app",
+    "theMost" : "The\nmost",
+    "secure" : "secure",
+    "personalJournalApp" : "personal journal app",
+    "continueWord" : "Continue",
+    "byContinuingYouAgreeToOur" : "By continuing, you agree to our",
+    "termsOfService" : "Terms of Service",
+    "and" : "and",
+    "privacyPolicy" : "Privacy Policy"
 }
