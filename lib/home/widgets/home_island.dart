@@ -63,7 +63,7 @@ class HomeIsland extends StatelessWidget {
                       child: Icon(
                         isLocked ? Icons.lock : Icons.lock_open,
                         size: 30,
-                        color: isLocked ? Colors.amber : Colors.grey,
+                        color: isLocked ? const Color(0xFF5e17Eb) : Colors.grey,
                       ),
                     ),
                     GestureDetector(

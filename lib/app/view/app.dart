@@ -9,11 +9,13 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:authentication_helper/authentication_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_api/hive_api.dart';
 import 'package:journal/home/home.dart';
 import 'package:journal/l10n/l10n.dart';
 import 'package:journal/res/app_themes.dart';
+import 'package:journal/res/widgets/onboarding_widget.dart';
 import 'package:journal/resolvers/localized_button_resolver.dart';
 import 'package:journal/resolvers/localized_country_resolver.dart';
 import 'package:journal/resolvers/localized_input_resolver.dart';
@@ -37,6 +39,23 @@ class App extends StatelessWidget {
 
     return Authenticator(
       stringResolver: stringResolver,
+      initialStep: AuthenticatorStep.onboarding,
+      authenticatorBuilder: (context, authStep) {
+        // ignore: missing_enum_constant_in_switch
+        switch (authStep.currentStep) {
+          case AuthenticatorStep.onboarding:
+            return OnboardingWidget(
+              key: UniqueKey(),
+              onContinue: () {
+                SystemChrome.setSystemUIOverlayStyle(
+                  SystemUiOverlayStyle.dark,
+                );
+                authStep.changeStep(AuthenticatorStep.signIn);
+              },
+            );
+        }
+        return null;
+      },
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider(

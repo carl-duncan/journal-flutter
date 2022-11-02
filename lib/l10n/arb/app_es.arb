@@ -33,5 +33,14 @@
     "editorLocked": "La edición está deshabilitada",
     "thankYouForTheSupport": "Gracias por el apoyo! ❤",
     "thankYouForTheSupportDescription": "¡Su apoyo nos ayuda a continuar mejorando la aplicación y agregar nuevas funciones!",
-    "unlockYourJournal": "Desbloquea tu diario"
+    "unlockYourJournal": "Desbloquea tu diario",
+    "theJournalApp" : "the journal app",
+    "theMost" : "el\nmás",
+    "secure" : "seguro",
+    "personalJournalApp" : "diario personal",
+    "continueWord" : "Continuar",
+    "byContinuingYouAgreeToOur" : "Al continuar, acepta nuestros",
+    "termsOfService" : "Términos de servicio",
+    "and" : "y",
+    "privacyPolicy" : "Política de privacidad"
 }
