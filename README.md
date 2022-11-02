@@ -29,6 +29,12 @@ $ flutter run --flavor staging --target lib/main_staging.dart
 
 # Production
 $ flutter run --flavor production --target lib/main_production.dart
+
+# All flavors add the arguments :
+#--dart-define=BASE_URL=SINGLESTORE_DATA_API_URL 
+#--dart-define=DATABASE=SINGLESTORE_DATABASE 
+#--dart-define=USERNAME=SINGLESTORE_DATABASE_USERNAME 
+#--dart-define=PASSWORD=SINGLESTORE_DATABASE_PASSWORD
 ```
 
 _\*Journal works on iOS, Android, Web, and Windows._
