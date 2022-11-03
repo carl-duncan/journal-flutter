@@ -58,12 +58,18 @@ class SettingsBody extends StatelessWidget {
               sliver: SliverList(
                 delegate: SliverChildListDelegate.fixed([
                   SettingsTile(
+                    title: 'Copy the key',
+                    subtitle: 'Copy the key to the clipboard',
+                    icon: Icons.copy,
+                    onTap: cubit.copyKey,
+                  ),
+                  SettingsTile(
                     title: l10n.logout,
                     color: Colors.red,
                     subtitle: l10n.signOutOfTheJournalAndReturnToTheLoginScreen,
                     icon: Icons.logout,
                     onTap: cubit.signOut,
-                  )
+                  ),
                 ]),
               ),
             )

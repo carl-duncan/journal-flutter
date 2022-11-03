@@ -2,6 +2,7 @@
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:journal/settings/cubit/cubit.dart';
 import 'package:journal_repository/journal_repository.dart';
@@ -52,6 +53,17 @@ void main() {
       build: () =>
           SettingsCubit(repository, userRepository, keyStoreRepository),
       act: (cubit) => cubit.signOut(),
+      expect: () => <SettingsState>[],
+    );
+
+    blocTest<SettingsCubit, SettingsState>(
+      'copy emits nothing',
+      build: () =>
+          SettingsCubit(repository, userRepository, keyStoreRepository),
+      act: (cubit) => cubit.copyKey(),
+      setUp: () {
+        WidgetsFlutterBinding.ensureInitialized();
+      },
       expect: () => <SettingsState>[],
     );
   });
