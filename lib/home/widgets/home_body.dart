@@ -62,9 +62,11 @@ class _HomeBodyState extends State<HomeBody> {
     final l10n = context.l10n;
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
+        final entries = state.entries.toList()
+          ..sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
         final entriesByMonth = state.showSearchBar
             ? _getEntriesByMonth(state.searchEntries)
-            : _getEntriesByMonth(state.entries);
+            : _getEntriesByMonth(entries);
         return Stack(
           children: [
             if (cubit.keyExists())
