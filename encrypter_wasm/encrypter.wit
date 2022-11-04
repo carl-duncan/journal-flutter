@@ -1,2 +1,2 @@
-decodestr: func(message: string, key:string) -> string
-encodestr: func(message: string, key:string) -> string
+decrypt: func(message: string, key:string) -> string
+encrypt: func(message: string, key:string) -> string

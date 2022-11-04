@@ -48,7 +48,7 @@ class SingleStoreApi extends JournalApi {
   Future<void> createEntry(Entry entry, {required String key}) async {
     final data = {
       'sql': 'insert into entries (title,body,user_id) '
-          'values (encodestr(?,?),encodestr(?,?),?)',
+          'values (encrypt(?,?),encrypt(?,?),?)',
       'args': [entry.title, key, entry.body, key, entry.userId],
       'database': database,
     };
@@ -82,7 +82,7 @@ class SingleStoreApi extends JournalApi {
   @override
   Future<List<Entry>> getEntries(String userId, {String? key}) async {
     const query = 'select id, '
-        'decodestr(title, ?) as title, decodestr(body, ?) as body,'
+        'decrypt(title, ?) as title, decrypt(body, ?) as body,'
         ' created_at, updated_at,user_id '
         'from entries where user_id = ?';
 
@@ -122,11 +122,11 @@ class SingleStoreApi extends JournalApi {
       data: {
         'sql': key != null
             ? 'select id, '
-                'decodestr(title, ?) as title, decodestr(body, ?) as body,'
+                'decrypt(title, ?) as title, decrypt(body, ?) as body,'
                 ' created_at, updated_at,user_id '
                 ' from entries where '
-                'decodestr(title,?) like ? '
-                'or decodestr(body,?) like ? and user_id = ?'
+                'decrypt(title,?) like ? '
+                'or decrypt(body,?) like ? and user_id = ?'
             : 'select * from entries where '
                 'user_id = ? and (title like ? '
                 'or body like ?)',
@@ -154,8 +154,8 @@ class SingleStoreApi extends JournalApi {
   @override
   Future<void> updateEntry(Entry entry, {required String key}) async {
     final data = {
-      'sql': 'update entries set title = encodestr(?,?), '
-          'body = encodestr(?,?), updated_at = ? where id = ?',
+      'sql': 'update entries set title = encrypt(?,?), '
+          'body = encrypt(?,?), updated_at = ? where id = ?',
       'args': [entry.title, key, entry.body, key, entry.updatedAt, entry.id],
       'database': database,
     };
